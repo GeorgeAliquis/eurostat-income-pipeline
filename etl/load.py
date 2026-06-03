@@ -1,15 +1,11 @@
-import requests
-from pyjstat import pyjstat
+import pandas as pd
 
-url = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/ilc_di03?format=JSON&lang=en"
+url = "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/ilc_di03?format=TSV&compressed=true"
 
-json_data = requests.get(url).json()
+df = pd.read_csv(
+    url,
+    sep="\t",
+    compression="gzip"
+)
 
-datasets = pyjstat.from_json_stat(json_data)
-
-df = datasets[0]
-
-df.to_csv("eurostat_test.csv", index=False)
-
-print(df.head())
-print(df.columns)
+df.to_csv("../data/raw/ilc_di03.tsv", index=False)
