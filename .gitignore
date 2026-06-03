@@ -8,7 +8,6 @@ venv/
 
 # IDE files
 .idea/
-.idea
 
 # Environment variables
 .env
