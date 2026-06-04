@@ -7,27 +7,13 @@ from etl.utils import EUROSTAT_URL, RAW_DATA_DIR
 
 
 def fetch_eurostat_data(url: str) -> pd.DataFrame:
-    """
-    Download Eurostat data from a TSV source.
-
-    Args:
-        url: URL of the Eurostat TSV dataset.
-
-    Returns:
-        A pandas DataFrame containing the downloaded data.
-    """
+    """Download Eurostat data from a TSV source."""
     df = pd.read_csv(url, sep="\t")
     return df
 
 
 def save_raw_data(df: pd.DataFrame, path: str | Path) -> None:
-    """
-    Persist raw data to disk as a CSV file.
-
-    Args:
-        df: DataFrame to save.
-        path: Destination file path.
-    """
+    """Persist raw data to disk as a CSV file."""
     df.to_csv(path, index=False)
 
 

@@ -7,3 +7,21 @@ df_long = df.melt(
     var_name="year",
     value_name="income"
 )
+
+def read_raw_data():
+    pass
+
+def reshape_data():
+    pass
+
+def extract_flags():
+    pass
+
+def clean_data():
+    pass
+
+def create_dimensions():
+    pass
+
+def save_processed_files():
+    pass
