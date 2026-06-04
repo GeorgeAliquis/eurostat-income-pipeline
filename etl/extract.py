@@ -3,13 +3,12 @@
 import pandas as pd
 from pathlib import Path
 
-from etl.utils import EUROSTAT_URL, RAW_DATA_DIR
+from etl.utils import EUROSTAT_URL, RAW_DATASET
 
 
 def fetch_eurostat_data(url: str) -> pd.DataFrame:
     """Download Eurostat data from a TSV source."""
-    df = pd.read_csv(url, sep="\t")
-    return df
+    return pd.read_csv(url, sep="\t")
 
 
 def save_raw_data(df: pd.DataFrame, path: str | Path) -> None:
@@ -24,10 +23,8 @@ def main() -> None:
     Downloads the Eurostat dataset and stores it in the raw data
     directory for subsequent processing steps.
     """
-    raw_data_tsv = RAW_DATA_DIR / "estat_ilc_di03.csv"
-
     df = fetch_eurostat_data(EUROSTAT_URL)
-    save_raw_data(df, path=raw_data_tsv)
+    save_raw_data(df, path=RAW_DATASET)
 
 
 if __name__ == "__main__":
