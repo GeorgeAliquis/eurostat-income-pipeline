@@ -1,7 +1,7 @@
 from pathlib import Path
 
 # ==========================
-# Paths & URLs
+# PATHS & URLS
 # ==========================
 EUROSTAT_URL = "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/ilc_di03?format=TSV"
 
@@ -12,4 +12,3 @@ RAW_DATA_DIR = DATA_DIR / "raw"
 PROCESSED_DATA_DIR = DATA_DIR / "processed"
 
 RAW_DATASET = RAW_DATA_DIR / "estat_ilc_di03.csv"
-

@@ -1,0 +1,48 @@
+country_id,country_code,country_name,is_country,is_time_period
+1,AL,Albania,True,False
+2,AT,Austria,True,False
+3,BE,Belgium,True,False
+4,BG,Bulgaria,True,False
+5,CH,Switzerland,True,False
+6,CY,Cyprus,True,False
+7,CZ,Czechia,True,False
+8,DE,Germany,True,False
+9,DK,Denmark,True,False
+10,EA,Euro Area,False,False
+11,EA18,Euro Area (18 countries),False,False
+12,EA19,Euro Area (19 countries),False,False
+13,EA20,Euro Area (20 countries),False,False
+14,EA21,Euro Area (21 countries),False,False
+15,EE,Estonia,True,False
+16,EL,Greece,True,False
+17,ES,Spain,True,False
+18,EU,European Union,False,False
+19,EU15,European Union (15 countries),False,False
+20,EU27_2007,"European Union (27 countries, 2007 composition)",False,True
+21,EU27_2020,"European Union (27 countries, post-Brexit)",False,True
+22,EU28,European Union (28 countries),False,False
+23,FI,Finland,True,False
+24,FR,France,True,False
+25,HR,Croatia,True,False
+26,HU,Hungary,True,False
+27,IE,Ireland,True,False
+28,IS,Iceland,True,False
+29,IT,Italy,True,False
+30,LT,Lithuania,True,False
+31,LU,Luxembourg,True,False
+32,LV,Latvia,True,False
+33,ME,Montenegro,True,False
+34,MK,Skopje,True,False
+35,MT,Malta,True,False
+36,NL,Netherlands,True,False
+37,NO,Norway,True,False
+38,PL,Poland,True,False
+39,PT,Portugal,True,False
+40,RO,Romania,True,False
+41,RS,Serbia,True,False
+42,SE,Sweden,True,False
+43,SI,Slovenia,True,False
+44,SK,Slovakia,True,False
+45,TR,Türkiye,True,False
+46,UK,United Kingdom,True,False
+47,XK,Kosovo,True,False
