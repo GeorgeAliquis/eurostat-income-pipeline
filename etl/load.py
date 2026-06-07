@@ -20,7 +20,7 @@ def get_engine():
         )
 
     db_url = (
-        f"postgresql+psycopg://"
+        f"postgresql+psycopg2://"
         f"{os.getenv('DB_USER')}:"
         f"{os.getenv('DB_PASSWORD')}@"
         f"{os.getenv('DB_HOST')}:"
@@ -31,7 +31,10 @@ def get_engine():
     return create_engine(db_url)
 
 
-def load_star_schema(fact: pd.DataFrame, dims: dict[str, pd.DataFrame]):
+def load_star_schema(
+        fact: pd.DataFrame,
+        dims: dict[str, pd.DataFrame]
+) -> None:
     engine = get_engine()
 
     for name, df in dims.items():
