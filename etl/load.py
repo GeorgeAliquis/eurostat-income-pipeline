@@ -3,14 +3,30 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 import pandas as pd
 
+from etl.utils import ENV_PATH
+
 
 def get_engine():
     """Create SQLAlchemy engine for PostgreSQL connection."""
-    load_dotenv()
-    db_url = os.getenv("DATABASE_URL")
+    load_dotenv(dotenv_path=ENV_PATH)
 
-    if not db_url:
-        raise ValueError("db_url is not set in .env file.")
+    required_vars = ["DB_USER", "DB_PASSWORD", "DB_HOST", "DB_PORT", "DB_NAME"]
+
+    missing = [var for var in required_vars if not os.getenv(var)]
+
+    if missing:
+        raise ValueError(
+            f"Missing required environment variables: {', '.join(missing)}"
+        )
+
+    db_url = (
+        f"postgresql+psycopg://"
+        f"{os.getenv('DB_USER')}:"
+        f"{os.getenv('DB_PASSWORD')}@"
+        f"{os.getenv('DB_HOST')}:"
+        f"{os.getenv('DB_PORT')}/"
+        f"{os.getenv('DB_NAME')}"
+    )
 
     return create_engine(db_url)
 

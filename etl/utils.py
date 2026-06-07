@@ -10,5 +10,6 @@ DATA_DIR = ROOT / "data"
 
 RAW_DATA_DIR = DATA_DIR / "raw"
 PROCESSED_DATA_DIR = DATA_DIR / "processed"
+ENV_PATH = ROOT / ".env"
 
 RAW_DATASET = RAW_DATA_DIR / "estat_ilc_di03.csv"
