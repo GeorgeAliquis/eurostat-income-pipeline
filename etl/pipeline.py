@@ -1,8 +1,7 @@
+from etl.utils import EUROSTAT_URL, RAW_DATASET
 from etl.extract import fetch_eurostat_data, save_raw_data
 from etl.transform import build_star_schema, save_to_csv
 from etl.load import load_star_schema
-
-from etl.utils import EUROSTAT_URL, RAW_DATASET
 
 
 def run_pipeline():

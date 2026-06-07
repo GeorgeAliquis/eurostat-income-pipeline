@@ -49,7 +49,7 @@ def expand_info_column(df: pd.DataFrame) -> pd.DataFrame:
     """
     info_column = df.columns[0]
 
-    metadata_columns = info_column.split(",")
+    metadata_columns = info_column.strip().split(",")
 
     df[metadata_columns] = (
         df[info_column]
@@ -87,6 +87,7 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     Operations:
     - Strips whitespace from column names
     - Strips whitespace from string columns
+    - Converts 'year' column dtype to int
     - Replaces missing-value marker ':' with None
     - Renames raw dataset columns to standardized schema names
     - Removes redundant 'freq' column
@@ -100,6 +101,8 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
 
     for col in df.columns:
         df[col] = df[col].str.strip()
+
+    df["year"] = df["year"].astype(int)
 
     return (
         df
@@ -161,9 +164,6 @@ def sort_values(df: pd.DataFrame) -> pd.DataFrame:
 
     return df.sort_values(by=order, ascending=rules)
 
-
-def add_inflation_adjusted_column():
-    ...
 
 def attach_surrogate_keys(
         fact: pd.DataFrame,
@@ -278,17 +278,3 @@ def save_to_csv(
         PROCESSED_DATA_DIR / "fact_income.csv",
         index=False,
     )
-
-
-def main() -> None:
-    """
-    Entry point for executing the ETL pipeline.
-
-    Runs full transformation and persists results as CSV files.
-    """
-    fact, dims = build_star_schema()
-    save_to_csv(fact, dims)
-
-
-if __name__ == "__main__":
-    main()

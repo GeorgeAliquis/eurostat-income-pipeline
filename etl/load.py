@@ -3,12 +3,12 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 import pandas as pd
 
-from etl.utils import ENV_PATH
+from etl.utils import ENV_FILE
 
 
 def get_engine():
     """Create SQLAlchemy engine for PostgreSQL connection."""
-    load_dotenv(dotenv_path=ENV_PATH)
+    load_dotenv(dotenv_path=ENV_FILE)
 
     required_vars = ["DB_USER", "DB_PASSWORD", "DB_HOST", "DB_PORT", "DB_NAME"]
 
