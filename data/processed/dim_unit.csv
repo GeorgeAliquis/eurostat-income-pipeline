@@ -1,4 +1,4 @@
-unit_id,unit
-1,EUR
-2,NAC
-3,PPS
+unit_id,unit,unit_label
+1,EUR,Euro
+2,NAC,National Currency
+3,PPS,Purchasing Power Standard

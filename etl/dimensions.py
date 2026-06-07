@@ -45,6 +45,12 @@ def create_statinfo_dimension(df: pd.DataFrame) -> pd.DataFrame:
     """Create statinfo dimension table with surrogate key."""
     statinfo_dim = create_dimension(df, "statinfo")
 
+    statinfo_dim["statinfo_label"] = statinfo_dim["statinfo"].map({
+        "MEAN_EI": "Average Equivalised Income",
+        "MED_EI": "Median Equivalised Income",
+    })
+
+
     statinfo_dim.insert(
         0,
         "statinfo_id",
@@ -57,6 +63,12 @@ def create_statinfo_dimension(df: pd.DataFrame) -> pd.DataFrame:
 def create_unit_dimension(df: pd.DataFrame) -> pd.DataFrame:
     """Create unit dimension table with surrogate key."""
     unit_dim = create_dimension(df, "unit")
+
+    unit_dim["unit_label"] = unit_dim["unit"].map({
+        "EUR": "Euro",
+        "NAC": "National Currency",
+        "PPS": "Purchasing Power Standard",
+    })
 
     unit_dim.insert(
         0,

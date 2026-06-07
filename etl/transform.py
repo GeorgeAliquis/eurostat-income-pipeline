@@ -3,7 +3,6 @@ ETL pipeline for transforming raw income data into a cleaned fact table and
 associated dimension tables.
 """
 import pandas as pd
-from pathlib import Path
 
 from etl.utils import RAW_DATASET, PROCESSED_DATA_DIR
 from etl.dimensions import create_dimensions
@@ -36,7 +35,18 @@ FACT_COLUMNS = [
 
 
 def expand_info_column(df: pd.DataFrame) -> pd.DataFrame:
-    """Split the combined metadata column into individual columns."""
+    """
+    Expands a single combined metadata column into multiple structured columns.
+
+    The raw dataset encodes multiple attributes (e.g. country, sex, unit)
+    in a single comma-separated column. This function splits that column
+    into separate fields and removes the original combined column.
+
+    Returns
+    -------
+    DataFrame
+        DataFrame with expanded metadata columns and no original packed column.
+    """
     info_column = df.columns[0]
 
     metadata_columns = info_column.split(",")
@@ -51,7 +61,18 @@ def expand_info_column(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def reshape_data(df: pd.DataFrame) -> pd.DataFrame:
-    """Convert yearly income columns from wide to long format."""
+    """
+    Converts the dataset from wide format (years as columns)
+    into long format (one row per year-observation).
+
+    The resulting structure is suitable for analytical modeling
+    and star schema fact table construction.
+
+    Returns
+    -------
+    DataFrame
+        Melted DataFrame with columns: id_vars + year + income
+    """
     return df.melt(
         id_vars=ID_VARS,
         var_name="year",
@@ -60,7 +81,21 @@ def reshape_data(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def clean_data(df: pd.DataFrame) -> pd.DataFrame:
-    """Clean values, rename columns, and remove unused fields."""
+    """
+    Standardizes column names and cleans string-based values.
+
+    Operations:
+    - Strips whitespace from column names
+    - Strips whitespace from string columns
+    - Replaces missing-value marker ':' with None
+    - Renames raw dataset columns to standardized schema names
+    - Removes redundant 'freq' column
+
+    Returns
+    -------
+    DataFrame
+        Cleaned and normalized dataset ready for transformation steps.
+    """
     df.columns = df.columns.str.strip()
 
     for col in df.columns:
@@ -75,56 +110,43 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def extract_flags(df: pd.DataFrame) -> pd.DataFrame:
-    """Separate income values from any accompanying flag codes."""
+    """
+    Separates numeric income values from embedded quality/metadata flags.
+
+    Some income entries contain a numeric value followed by a flag
+    (e.g. estimation or data quality indicator). This function splits
+    them into two explicit columns.
+
+    Returns
+    -------
+    DataFrame
+        DataFrame with:
+        - income (numeric value as string at this stage)
+        - flag (optional metadata indicator)
+    """
     split = (
         df["income"]
         .str.split(r"\s+", n=1, expand=True)
     )
 
     return df.assign(
-        income=split[0],
+        income=split[0].astype(float),
         flag=split[1],
     )
 
 
-def materialize_star_schema(df: pd.DataFrame) -> None:
-    """
-    Create dimension tables and a fact table from cleaned data, then
-    persist them as CSV files in a star schema layout.
-
-    Dimensions are generated via `create_dimensions`, surrogate keys
-    are mapped onto the fact table, and both facts and dimensions are
-    written to `PROCESSED_DATA_DIR`.
-    """
-    fact = df.copy()
-    dims = create_dimensions(df)
-
-    for dim_name, (natural_key, surrogate_key) in DIMENSION_KEYS.items():
-        dim_df = dims[dim_name]
-
-        lookup = dim_df.set_index(natural_key)[surrogate_key]
-        fact[surrogate_key] = fact[natural_key].map(lookup)
-
-        dim_df.to_csv(
-            PROCESSED_DATA_DIR / f"dim_{dim_name}.csv",
-            index=False,
-        )
-
-    fact_income = fact[FACT_COLUMNS].copy()
-
-    fact_income["income"] = pd.to_numeric(
-        fact_income["income"],
-        errors="coerce"
-    )
-
-    fact_income.to_csv(
-        PROCESSED_DATA_DIR / "fact_income.csv",
-        index=False,
-    )
-
-
 def sort_values(df: pd.DataFrame) -> pd.DataFrame:
-    """Sort records using a consistent ordering for output."""
+    """
+    Applies deterministic ordering to the dataset for reproducible output.
+
+    Sorting ensures consistent CSV exports and stable diffs between runs,
+    which is useful for debugging and version control comparisons.
+
+    Returns
+    -------
+    DataFrame
+        Sorted DataFrame according to predefined ordering rules.
+    """
     order_mapping = {
         "year": False,
         "sex": True,
@@ -140,7 +162,70 @@ def sort_values(df: pd.DataFrame) -> pd.DataFrame:
     return df.sort_values(by=order, ascending=rules)
 
 
-def main() -> None:
+def add_inflation_adjusted_column():
+    ...
+
+def attach_surrogate_keys(
+        fact: pd.DataFrame,
+        dims: dict[str, pd.DataFrame]
+) -> pd.DataFrame:
+    """
+    Maps natural keys in the fact table to surrogate keys from dimension tables.
+
+    This function performs the dimensional modeling step of the ETL pipeline,
+    replacing human-readable attributes with integer surrogate keys
+    suitable for relational storage.
+
+    Parameters
+    ----------
+    fact : DataFrame
+        Fact table containing natural keys prior to dimension mapping.
+    dims : dict[str, DataFrame]
+        Dictionary of dimension tables keyed by dimension name.
+
+    Returns
+    -------
+    DataFrame
+        Fact table enriched with surrogate key foreign keys.
+    """
+    fact = fact.copy()
+
+    for dim_name, (natural_key, surrogate_key) in DIMENSION_KEYS.items():
+        dim_df = dims[dim_name]
+
+        lookup = dim_df.set_index(natural_key)[surrogate_key]
+        fact[surrogate_key] = fact[natural_key].map(lookup)
+
+    return fact
+
+
+def build_star_schema():
+    """
+    Executes the full transformation pipeline and constructs a star schema.
+
+    Pipeline stages:
+    1. Load raw dataset
+    2. Expand packed metadata columns
+    3. Reshape wide format into long format
+    4. Clean and normalize values
+    5. Extract data quality flags
+    6. Sort for deterministic output
+    7. Build dimension tables
+    8. Attach surrogate keys to fact table
+    9. Finalize fact table schema
+
+    Returns
+    -------
+    fact : DataFrame
+        Final fact table containing surrogate keys and analytical measures.
+    dims : dict[str, DataFrame]
+        Dictionary of dimension tables keyed by dimension name.
+
+    Notes
+    -----
+    This function is the canonical "model builder" for both CSV export
+    and database loading.
+    """
     df = (
         pd.read_csv(RAW_DATASET)
         .pipe(expand_info_column)
@@ -150,7 +235,59 @@ def main() -> None:
         .pipe(sort_values)
     )
 
-    materialize_star_schema(df)
+    dims = create_dimensions(df)
+    fact = attach_surrogate_keys(df, dims)
+    fact = fact[FACT_COLUMNS].copy()
+
+    return fact, dims
+
+
+def save_to_csv(
+        fact: pd.DataFrame,
+        dims: dict[str, pd.DataFrame]
+) -> None:
+    """
+    Persists the star schema to disk as CSV files.
+
+    This function is a pure I/O layer:
+    it does not perform any transformation or schema inference.
+
+    Outputs
+    -------
+    - One CSV file per dimension table (dim_<name>.csv)
+    - One fact table CSV (fact_income.csv)
+
+    Parameters
+    ----------
+    fact : DataFrame
+        Final fact table with surrogate keys already applied.
+    dims : dict[str, DataFrame]
+        Dictionary of dimension tables.
+
+    Side Effects
+    ------------
+    Writes files to PROCESSED_DATA_DIR.
+    """
+    for dim_name in DIMENSION_KEYS.keys():
+        dims[dim_name].to_csv(
+            PROCESSED_DATA_DIR / f"dim_{dim_name}.csv",
+            index=False,
+        )
+
+    fact.to_csv(
+        PROCESSED_DATA_DIR / "fact_income.csv",
+        index=False,
+    )
+
+
+def main() -> None:
+    """
+    Entry point for executing the ETL pipeline.
+
+    Runs full transformation and persists results as CSV files.
+    """
+    fact, dims = build_star_schema()
+    save_to_csv(fact, dims)
 
 
 if __name__ == "__main__":
