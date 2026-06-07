@@ -98,12 +98,12 @@ def save_processed_files(df: pd.DataFrame) -> None:
     dims = create_dimensions(df)
 
     for dim_name, (natural_key, surrogate_key) in DIMENSION_KEYS.items():
-        dimension = dims[dim_name]
+        dim_df = dims[dim_name]
 
-        lookup = dimension.set_index(natural_key)[surrogate_key]
+        lookup = dim_df.set_index(natural_key)[surrogate_key]
         fact[surrogate_key] = fact[natural_key].map(lookup)
 
-        dimension.to_csv(
+        dim_df.to_csv(
             PROCESSED_DATA_DIR / f"dim_{dim_name}.csv",
             index=False,
         )

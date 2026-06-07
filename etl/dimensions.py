@@ -71,10 +71,10 @@ def create_sex_dimension(df: pd.DataFrame) -> pd.DataFrame:
     """Create sex dimension with category mapping and surrogate key."""
     sex_dim = create_dimension(df, "sex")
 
-    sex_dim["sex_category"] = sex_dim["sex"].map({
-        "T": "TOTAL",
-        "M": "MALE",
-        "F": "FEMALE",
+    sex_dim["sex_label"] = sex_dim["sex"].map({
+        "T": "All",
+        "M": "Male",
+        "F": "Female",
     })
 
     sex_dim.insert(
@@ -146,6 +146,8 @@ def create_age_dimension(df: pd.DataFrame) -> pd.DataFrame:
 
 def create_dimension(df: pd.DataFrame, col: str) -> pd.DataFrame:
     """Create a deduplicated sorted dimension table for a given column."""
+    assert col in df.columns
+
     return (
         df[[col]]
         .drop_duplicates()

@@ -1,4 +1,4 @@
-sex_id,sex,sex_category
-1,F,FEMALE
-2,M,MALE
-3,T,TOTAL
+sex_id,sex,sex_label
+1,F,Female
+2,M,Male
+3,T,All
