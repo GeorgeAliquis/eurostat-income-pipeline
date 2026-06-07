@@ -1,13 +1,18 @@
+import os
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 import pandas as pd
 
 
-DB_URI = "postgresql+psycopg2://postgres:password@localhost:5432/mydb"
-
-
 def get_engine():
     """Create SQLAlchemy engine for PostgreSQL connection."""
-    return create_engine(DB_URI)
+    load_dotenv()
+    db_url = os.getenv("DATABASE_URL")
+
+    if not db_url:
+        raise ValueError("db_url is not set in .env file.")
+
+    return create_engine(db_url)
 
 
 def load_star_schema(fact: pd.DataFrame, dims: dict[str, pd.DataFrame]):

@@ -50,7 +50,6 @@ def create_statinfo_dimension(df: pd.DataFrame) -> pd.DataFrame:
         "MED_EI": "Median Equivalised Income",
     })
 
-
     statinfo_dim.insert(
         0,
         "statinfo_id",
