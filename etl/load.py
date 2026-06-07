@@ -38,6 +38,14 @@ def load_star_schema(
     engine = get_engine()
 
     for name, df in dims.items():
-        df.to_sql(f"dim_{name}", engine, if_exists="replace", index=False)
+        df.to_sql(
+            f"dim_{name}", engine,
+            if_exists="replace",
+            index=False
+        )
 
-    fact.to_sql("fact_income", engine, if_exists="replace", index=False)
+    fact.to_sql(
+        "fact_income", engine,
+        if_exists="replace",
+        index=False
+    )
