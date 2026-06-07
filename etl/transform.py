@@ -35,11 +35,6 @@ FACT_COLUMNS = [
 ]
 
 
-def read_raw_data(path: str | Path) -> pd.DataFrame:
-    """Load the raw dataset from a CSV file."""
-    return pd.read_csv(path)
-
-
 def expand_info_column(df: pd.DataFrame) -> pd.DataFrame:
     """Split the combined metadata column into individual columns."""
     info_column = df.columns[0]
@@ -92,8 +87,15 @@ def extract_flags(df: pd.DataFrame) -> pd.DataFrame:
     )
 
 
-def save_processed_files(df: pd.DataFrame) -> None:
-    """Persist the fact table with surrogate key references to dimensions."""
+def materialize_star_schema(df: pd.DataFrame) -> None:
+    """
+    Create dimension tables and a fact table from cleaned data, then
+    persist them as CSV files in a star schema layout.
+
+    Dimensions are generated via `create_dimensions`, surrogate keys
+    are mapped onto the fact table, and both facts and dimensions are
+    written to `PROCESSED_DATA_DIR`.
+    """
     fact = df.copy()
     dims = create_dimensions(df)
 
@@ -140,7 +142,7 @@ def sort_values(df: pd.DataFrame) -> pd.DataFrame:
 
 def main() -> None:
     df = (
-        read_raw_data(RAW_DATASET)
+        pd.read_csv(RAW_DATASET)
         .pipe(expand_info_column)
         .pipe(reshape_data)
         .pipe(clean_data)
@@ -148,7 +150,7 @@ def main() -> None:
         .pipe(sort_values)
     )
 
-    save_processed_files(df)
+    materialize_star_schema(df)
 
 
 if __name__ == "__main__":
