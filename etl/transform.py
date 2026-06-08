@@ -87,7 +87,7 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     Operations:
     - Strips whitespace from column names
     - Strips whitespace from string columns
-    - Converts 'year' column dtype to int
+    - Converts 'year' column dtype to integer
     - Replaces missing-value marker ':' with None
     - Renames raw dataset columns to standardized schema names
     - Removes redundant 'freq' column
@@ -101,6 +101,8 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
 
     for col in df.columns:
         df[col] = df[col].str.strip()
+
+    assert df["year"].isna().sum() == 0
 
     df["year"] = df["year"].astype(int)
 
