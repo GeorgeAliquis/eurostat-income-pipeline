@@ -8,7 +8,12 @@ from etl.utils import EUROSTAT_URL, RAW_DATASET
 
 def fetch_eurostat_data(url: str) -> pd.DataFrame:
     """Download Eurostat data from a TSV source."""
-    return pd.read_csv(url, sep="\t")
+    try:
+        return pd.read_csv(url, sep="\t")
+    except Exception as e:
+        raise RuntimeError(
+            f"Failed downloading Eurostat dataset"
+        ) from e
 
 
 def save_raw_data(df: pd.DataFrame, path: str | Path) -> None:

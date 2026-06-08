@@ -12,7 +12,14 @@ COLUMN_RENAMES = {
     "geo\\TIME_PERIOD": "country_code",
 }
 
-ID_VARS = ["freq", "age", "sex", "statinfo", "unit", "geo\\TIME_PERIOD"]
+ID_VARS = [
+    "freq",
+    "age",
+    "sex",
+    "statinfo",
+    "unit",
+    "geo\\TIME_PERIOD",
+]
 
 DIMENSION_KEYS = {
     "country": ("country_code", "country_id"),
@@ -102,7 +109,8 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     for col in df.columns:
         df[col] = df[col].str.strip()
 
-    assert df["year"].isna().sum() == 0
+    if df["year"].isna().any():
+        raise ValueError("Year contains null values")
 
     df["year"] = df["year"].astype(int)
 

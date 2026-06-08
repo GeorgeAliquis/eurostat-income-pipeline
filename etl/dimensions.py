@@ -157,7 +157,8 @@ def create_age_dimension(df: pd.DataFrame) -> pd.DataFrame:
 
 def create_dimension(df: pd.DataFrame, col: str) -> pd.DataFrame:
     """Create a deduplicated sorted dimension table for a given column."""
-    assert col in df.columns
+    if col not in df.columns:
+        raise ValueError(f"Missing column: {col}")
 
     return (
         df[[col]]
