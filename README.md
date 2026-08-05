@@ -104,13 +104,13 @@ Power BI Dashboard
                      │
 dim_age ─────── fact_income ─────── dim_sex
                      │
-              statinfo_id
+                statinfo_id
                      │
-              dim_statinfo
+                dim_statinfo
                      │
-                 unit_id
+                  unit_id
                      │
-                 dim_unit
+                  dim_unit
 ```
 
 ---
