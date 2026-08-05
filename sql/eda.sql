@@ -28,7 +28,6 @@ SELECT
 	MIN(year) AS first_year,
 	MAX(year) AS last_year,
 	COUNT(DISTINCT year) AS years_covered
-	
 FROM vw_income_analysis;
 
 
@@ -38,7 +37,6 @@ SELECT
 	COUNT(DISTINCT sex) AS sex_categories,
 	COUNT(DISTINCT unit) AS units,
 	COUNT(DISTINCT statinfo) AS statistics
-	
 FROM vw_income_analysis;
 
 -- ==========================================================
