@@ -71,47 +71,50 @@ The Power BI dashboard enables users to explore income distribution across Europ
 
 # Project Workflow
 
-```text
+<div align="center">
+<pre>
 Eurostat
-      │
-      ▼
+│
+▼
 Extract
-      │
-      ▼
-Transform & Clean (Python + Pandas)
-      │
-      ▼
+│
+▼
+Transform &amp; Clean (Python + Pandas)
+│
+▼
 Star Schema
-      │
-      ▼
+│
+▼
 PostgreSQL Data Warehouse
-      │
-      ▼
-SQL Validation & EDA
-      │
-      ▼
+│
+▼
+SQL Validation &amp; EDA
+│
+▼
 Power BI Dashboard
-```
+</pre>
+</div>
 
 ---
 
 # Data Warehouse Schema
-
-```text
-                 dim_country
-                     │
-                 country_id
-                     │
-dim_age ─────── fact_income ─────── dim_sex
-                     │
-                statinfo_id
-                     │
-                dim_statinfo
-                     │
-                  unit_id
-                     │
-                  dim_unit
-```
+<div align="center">
+<pre>
+dim_country
+│
+country_id
+│
+dim_age ─── age_id ─── fact_income ─── sex_id ─── dim_sex
+│
+statinfo_id
+│
+dim_statinfo
+│
+unit_id
+│
+dim_unit
+</pre>
+</div>
 
 ---
 
@@ -132,9 +135,9 @@ dim_age ─────── fact_income ─────── dim_sex
 │   └── utils.py
 │
 ├── sql/
-│   ├── create_views.sql
-│   ├── validation.sql
-│   └── eda.sql
+│   ├── create_view.sql
+│   ├── eda.sql
+│   └── validation.sql
 │
 ├── dashboard/
 │   └── Eurostat_Income_Distribution_Dashboard.pbix
