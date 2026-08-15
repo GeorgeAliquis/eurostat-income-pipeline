@@ -33,7 +33,7 @@ The project showcases practical skills in:
 
 **Source:** Eurostat
 
-**Dataset:** `ilc_di03` – Income distribution by age and sex
+**Dataset:** `ilc_di03` – Mean and median income by age and sex
 
 The pipeline retrieves raw data directly from Eurostat, transforms it into a star-schema warehouse, and produces an interactive dashboard for income analysis.
 
