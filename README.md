@@ -142,6 +142,7 @@ dim_unit
 ├── dashboard/
 │   └── Eurostat_Income_Distribution_Dashboard.pbix
 │
+├── LICENSE
 └── README.md
 ```
 
@@ -151,12 +152,11 @@ dim_unit
 
 - Python
 - Pandas
-- PostgreSQL
 - SQLAlchemy
+- PostgreSQL
 - SQL
 - Power BI
-- Git
-- GitHub
+- Git / GitHub
 
 ---
 
@@ -181,3 +181,5 @@ dim_unit
 ## Author
 
 George Aliquis
+
+---
