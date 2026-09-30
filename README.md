@@ -1,8 +1,8 @@
-# Eurostat Income Analytics Pipeline
+# European Income Distribution Analytics Pipeline
 
-An end-to-end data engineering and business intelligence project built using publicly available Eurostat income distribution data.
+An end-to-end data analytics and business intelligence project using publicly available Eurostat income distribution data.
 
-The project demonstrates the complete analytics workflow, from data extraction and transformation to dimensional modeling, SQL analysis, and interactive dashboard development in Power BI.
+The project covers data extraction, preparation, dimensional modeling, SQL analysis, and interactive dashboard development in Power BI.
 
 ---
 
@@ -10,36 +10,42 @@ The project demonstrates the complete analytics workflow, from data extraction a
 
 ![Eurostat Income Dashboard](assets/dashboard_screenshot.png)
 
-*Interactive Power BI dashboard for exploring European income distribution by country, year, age group, sex, income type, and unit.*
+*Interactive Power BI dashboard for exploring European income distribution by country, year, age group, sex, unit, statistic type.*
 
 ---
 
 ## Project Overview
 
-This project builds an analytical data warehouse using the Eurostat **ilc_di03** dataset and provides an interactive dashboard for exploring income distribution across European countries.
+This project analyzes income distribution data from Eurostat, covering mean and median income across European countries from 1995 to 2025. The data is extracted directly from Eurostat, cleaned and transformed with Python and Pandas, modeled using a star schema, and loaded into PostgreSQL for SQL-based validation and exploratory analysis.
 
-The project showcases practical skills in:
-
-- Data extraction from Eurostat
-- Data cleaning and transformation with Python and Pandas
-- Star schema dimensional modeling
-- PostgreSQL data warehousing
-- SQL-based data validation and exploratory data analysis (EDA)
-- Interactive Power BI dashboard development
+The resulting data model is used in Power BI to enable interactive analysis of how income varies across countries and changes over time, with filtering by age group, sex, unit, and statistic type (mean / median).
+ 
+The project combines data extraction, preparation, dimensional modeling, data warehousing, SQL analysis, and business intelligence into an end-to-end analytics workflow.
 
 ---
 
+## Analytical Questions
+
+The project was designed to explore questions such as:
+
+- How has income changed across European countries over time?
+- How do mean and median income differ across countries?
+- How do income levels vary by age group and sex?
+- Which countries show the largest changes in income over time?
+- How do income trends differ between demographic groups?
+
+---
 ## Dataset
 
 **Source:** Eurostat
 
 **Dataset:** `ilc_di03` – Mean and median income by age and sex
 
-The pipeline retrieves raw data directly from Eurostat, transforms it into a star-schema warehouse, and produces an interactive dashboard for income analysis.
+The pipeline retrieves raw data directly from Eurostat, transforms and models it into a star schema, and loads the resulting tables into PostgreSQL for analysis.
 
 ---
 
-# Dashboard
+## Dashboard
 
 The Power BI dashboard enables users to explore income distribution across Europe through interactive visualizations.
 
@@ -53,8 +59,8 @@ The Power BI dashboard enables users to explore income distribution across Europ
   - Year
   - Age group
   - Sex
-  - Income type (Mean / Median)
   - Unit
+  - Statistic type (Mean / Median)
 
 ### Dashboard Visualizations
 
@@ -69,7 +75,7 @@ The Power BI dashboard enables users to explore income distribution across Europ
 
 ---
 
-# Project Workflow
+## Project Workflow
 
 <div align="center">
 <pre>
@@ -97,7 +103,10 @@ Power BI Dashboard
 
 ---
 
-# Data Warehouse Schema
+## Data Warehouse Schema
+
+The warehouse follows a star schema, with `fact_income` storing the income measures and foreign keys linking to dimension tables for country, age, sex, statistical information, and unit. This structure separates measurable income data from descriptive attributes and supports flexible SQL analysis and Power BI reporting.
+
 <div align="center">
 <pre>
 dim_country
@@ -118,19 +127,21 @@ dim_unit
 
 ---
 
-# Repository Structure
+## Repository Structure
 
 ```text
 .
 ├── data/
-│   ├── raw/
-│   └── processed/
+│   ├── raw/                    # Raw Eurostat data
+│   └── processed/              # Transformed dimension and fact tables
+│
+├── assets/                     # Screenshots
 │
 ├── etl/
 │   ├── dimensions.py
 │   ├── extract.py
 │   ├── load.py
-│   ├── pipeline.py
+│   ├── pipeline.py             # Runs the ETL pipeline
 │   ├── transform.py
 │   └── utils.py
 │
@@ -148,7 +159,7 @@ dim_unit
 
 ---
 
-# Technologies
+## Technologies
 
 - Python
 - Pandas
@@ -157,24 +168,6 @@ dim_unit
 - SQL
 - Power BI
 - Git / GitHub
-
----
-
-# Project Highlights
-
-✔ Automated data extraction from Eurostat
-
-✔ Data transformation and cleaning
-
-✔ Star schema dimensional modeling
-
-✔ PostgreSQL analytical warehouse
-
-✔ SQL validation and exploratory analysis
-
-✔ Interactive Power BI dashboard
-
-✔ End-to-end analytics workflow
 
 ---
 
