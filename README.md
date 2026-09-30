@@ -4,6 +4,20 @@ An end-to-end data analytics and business intelligence project using publicly av
 
 ---
 
+## Table of Contents
+
+- [Project Overview](#project-overview)
+- [Analytical Questions](#analytical-questions)
+- [Dataset](#dataset)
+- [Dashboard](#dashboard)
+- [Project Workflow](#project-workflow)
+- [Data Warehouse Schema](#data-warehouse-schema)
+- [Repository Structure](#repository-structure)
+- [Technologies](#technologies)
+- [Author](#author)
+
+---
+
 ## Project Overview
 
 This project analyzes income distribution data from Eurostat, covering mean and median income across European countries from 1995 to 2025. The data is extracted directly from Eurostat, cleaned and transformed with Python and Pandas, modeled using a star schema, and loaded into PostgreSQL for SQL-based validation and exploratory analysis.
