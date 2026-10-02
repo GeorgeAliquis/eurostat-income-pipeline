@@ -4,7 +4,7 @@ associated dimension tables.
 """
 import pandas as pd
 
-from etl.utils import RAW_DATASET, PROCESSED_DATA_DIR
+from etl.paths import RAW_DATASET, PROCESSED_DATA_DIR
 from etl.dimensions import create_dimensions
 
 COLUMN_RENAMES = {

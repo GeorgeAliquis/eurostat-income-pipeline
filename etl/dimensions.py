@@ -5,13 +5,20 @@ ETL dimension builders for transforming raw dataset columns into normalized look
 import re
 import pandas as pd
 import pycountry
+import requests
+import math
+import time
+from dotenv import load_dotenv
+import os
+import json
+
+from etl.paths import ENV_FILE
 
 COUNTRY_SPECIAL_CODES = {"EL", "UK", "XK"}
 
 SPECIAL_CODES = {
     "EL": "Greece",  # Eurostat uses EL instead of GR
     "UK": "United Kingdom",  # legacy Eurostat code
-    "MK": "Skopje",
     "XK": "Kosovo",
 
     "EA": "Euro Area",
@@ -29,6 +36,10 @@ SPECIAL_CODES = {
 
 YEAR_RE = re.compile(r"\d{4}")
 
+load_dotenv(dotenv_path=ENV_FILE)
+
+API_KEY = os.getenv("REST_COUNTRIES_API_KEY")
+
 
 def create_dimensions(df: pd.DataFrame) -> dict[str, pd.DataFrame]:
     """Build all dimension tables from a raw dataframe."""
@@ -39,6 +50,19 @@ def create_dimensions(df: pd.DataFrame) -> dict[str, pd.DataFrame]:
         "statinfo": create_statinfo_dimension(df),
         "age": create_age_dimension(df)
     }
+
+
+def create_dimension(df: pd.DataFrame, col: str) -> pd.DataFrame:
+    """Create a deduplicated sorted dimension table for a given column."""
+    if col not in df.columns:
+        raise ValueError(f"Missing column: {col}")
+
+    return (
+        df[[col]]
+        .drop_duplicates()
+        .sort_values(col)
+        .reset_index(drop=True)
+    )
 
 
 def create_statinfo_dimension(df: pd.DataFrame) -> pd.DataFrame:
@@ -135,6 +159,80 @@ def get_country(code: str):
     return pycountry.countries.get(alpha_2=code)
 
 
+def get_country_color(
+        country: str,
+        max_retries = 3,
+        initial_backoff = 1.0
+) -> str | None:
+    for attempt in range(max_retries + 1):
+        response = requests.get(
+            f"https://api.restcountries.com/countries/v5?q={country}",
+            headers={"Authorization": f"Bearer {API_KEY}"},
+        )
+
+        if response.status_code == 429:
+            if attempt == max_retries:
+                response.raise_for_status()
+
+            retry_after = response.headers.get("Retry-After")
+
+            if retry_after is not None:
+                wait_time = float(retry_after)
+            else:
+                wait_time = initial_backoff * (2 ** attempt)
+
+            time.sleep(wait_time)
+            continue
+
+        response.raise_for_status()
+
+        data = response.json()
+        colors = data["data"]["objects"][0]["flag"]["colors"]
+
+        return choose_flag_color(colors)
+
+    return None
+
+
+def choose_flag_color(colors: dict) -> str | None:
+    dominant = colors["dominant"]
+    prominent = colors["prominent"]
+
+    if not is_too_close_to_white(dominant):
+        return dominant
+
+    if not is_too_close_to_white(prominent):
+        return prominent
+
+    palette = sorted(
+        colors["palette"],
+        key=lambda x: x["proportion"],
+        reverse=True,
+    )
+
+    for color in palette:
+        if not is_too_close_to_white(color["hex"]):
+            return color["hex"]
+
+    return None
+
+
+def is_too_close_to_white(hex_color: str, threshold: float = 50) -> bool:
+    hex_color = hex_color.lstrip("#")
+
+    r = int(hex_color[0:2], 16)
+    g = int(hex_color[2:4], 16)
+    b = int(hex_color[4:6], 16)
+
+    distance = math.sqrt(
+        (255 - r) ** 2 +
+        (255 - g) ** 2 +
+        (255 - b) ** 2
+    )
+
+    return distance < threshold
+
+
 def create_age_dimension(df: pd.DataFrame) -> pd.DataFrame:
     """Create age dimension with parsed age ranges and labels."""
     age_dim = create_dimension(df, "age_group")
@@ -153,19 +251,6 @@ def create_age_dimension(df: pd.DataFrame) -> pd.DataFrame:
     )
 
     return age_dim
-
-
-def create_dimension(df: pd.DataFrame, col: str) -> pd.DataFrame:
-    """Create a deduplicated sorted dimension table for a given column."""
-    if col not in df.columns:
-        raise ValueError(f"Missing column: {col}")
-
-    return (
-        df[[col]]
-        .drop_duplicates()
-        .sort_values(col)
-        .reset_index(drop=True)
-    )
 
 
 def parse_age_group(age_code: str) -> dict:

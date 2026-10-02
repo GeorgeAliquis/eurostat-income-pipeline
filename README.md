@@ -143,28 +143,29 @@ dim_unit
 
 ```text
 .
-├── data/
-│   ├── raw/                    # Raw Eurostat data
-│   └── processed/              # Transformed dimension and fact tables
-│
 ├── assets/                     # Screenshots
+│
+├── dashboard/
+│   └── Eurostat_Income_Distribution_Dashboard.pbix
+│
+├── data/
+│   ├── processed/              # Transformed dimension and fact tables
+│   └── raw/                    # Raw Eurostat data
 │
 ├── etl/
 │   ├── dimensions.py
 │   ├── extract.py
 │   ├── load.py
+│   ├── paths.py
 │   ├── pipeline.py             # Runs the ETL pipeline
-│   ├── transform.py
-│   └── utils.py
+│   └── transform.py
 │
 ├── sql/
 │   ├── create_view.sql
 │   ├── eda.sql
 │   └── validation.sql
 │
-├── dashboard/
-│   └── Eurostat_Income_Distribution_Dashboard.pbix
-│
+├── .gitignore
 ├── LICENSE
 └── README.md
 ```

@@ -3,7 +3,7 @@
 import pandas as pd
 from pathlib import Path
 
-from etl.utils import EUROSTAT_URL, RAW_DATASET
+from etl.paths import EUROSTAT_URL, RAW_DATASET
 
 
 def fetch_eurostat_data(url: str) -> pd.DataFrame:

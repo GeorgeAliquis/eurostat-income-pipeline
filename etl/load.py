@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 import pandas as pd
 
-from etl.utils import ENV_FILE
+from etl.paths import ENV_FILE
 
 
 def get_engine():
