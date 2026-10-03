@@ -239,7 +239,13 @@ def choose_flag_color(
         colors: dict,
         used_colors: list[str],
 ) -> str | None:
-    """Select a suitable non-white color from flag color data."""
+    """
+    Select a visually distinct, sufficiently contrasting color for a chart line.
+
+    Colors that are too light or too similar to previously used colors are
+    skipped. If no suitable color is available, falls back to the first color
+    that is not too close to white.
+    """
     dominant = colors["dominant"]
     prominent = colors["prominent"]
 
@@ -263,7 +269,7 @@ def choose_flag_color(
     ]
 
     for candidate in candidates:
-        if is_too_close_to_white(candidate):
+        if is_visually_too_light(candidate):
             continue
 
         if any(
@@ -275,12 +281,12 @@ def choose_flag_color(
         return candidate
 
     # If no sufficiently distinct color is available,
-    # fall back to the first visible flag color.
+    # fall back to the first color that is not too close to white.
     for candidate in candidates:
         if not is_too_close_to_white(candidate):
             return candidate
 
-    return None
+    return dominant or None
 
 
 def colors_are_too_similar(
@@ -313,9 +319,40 @@ def colors_are_too_similar(
     return distance < threshold
 
 
+def is_visually_too_light(
+        hex_color: str,
+        min_contrast: float = 2.5,
+) -> bool:
+    """Check whether a color has insufficient contrast against a white background."""
+    hex_color = hex_color.lstrip("#")
+
+    r = int(hex_color[0:2], 16) / 255
+    g = int(hex_color[2:4], 16) / 255
+    b = int(hex_color[4:6], 16) / 255
+
+    def linearize(channel: float) -> float:
+        if channel <= 0.04045:
+            return channel / 12.92
+        return ((channel + 0.055) / 1.055) ** 2.4
+
+    r = linearize(r)
+    g = linearize(g)
+    b = linearize(b)
+
+    luminance = (
+        0.2126 * r
+        + 0.7152 * g
+        + 0.0722 * b
+    )
+
+    contrast_ratio = 1.05 / (luminance + 0.05)
+
+    return contrast_ratio < min_contrast
+
+
 def is_too_close_to_white(
         hex_color: str,
-        threshold: float = 50,
+        threshold: float = 70,
 ) -> bool:
     """Check whether a hex color is too close to white."""
     hex_color = hex_color.lstrip("#")
