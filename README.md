@@ -31,7 +31,7 @@ The project combines data extraction, preparation, dimensional modeling, data wa
 
 ## Dashboard Preview
 
-![Eurostat Income Dashboard](assets/dashboard_screenshot_v2.png)
+![Eurostat Income Dashboard](assets/dashboard_screenshot_v3.png)
 
 *Interactive dashboard developed in Power BI for exploring European income distribution by country, year, age group, sex, unit, and statistic type.*
 
