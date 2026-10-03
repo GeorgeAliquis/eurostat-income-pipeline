@@ -10,7 +10,6 @@ import math
 import time
 from dotenv import load_dotenv
 import os
-import json
 
 from etl.paths import ENV_FILE
 
@@ -39,6 +38,8 @@ YEAR_RE = re.compile(r"\d{4}")
 load_dotenv(dotenv_path=ENV_FILE)
 
 API_KEY = os.getenv("REST_COUNTRIES_API_KEY")
+
+COLOR_SIMILARITY_THRESHOLD = 75
 
 
 def create_dimensions(df: pd.DataFrame) -> dict[str, pd.DataFrame]:
@@ -70,8 +71,8 @@ def create_statinfo_dimension(df: pd.DataFrame) -> pd.DataFrame:
     statinfo_dim = create_dimension(df, "statinfo")
 
     statinfo_dim["statinfo_label"] = statinfo_dim["statinfo"].map({
-        "MEAN_EI": "Average Equivalised Income",
-        "MED_EI": "Median Equivalised Income",
+        "MEAN_EI": "Mean",
+        "MED_EI": "Median",
     })
 
     statinfo_dim.insert(
@@ -123,6 +124,7 @@ def create_sex_dimension(df: pd.DataFrame) -> pd.DataFrame:
 
 def create_country_dimension(df: pd.DataFrame) -> pd.DataFrame:
     """Create country dimension with name lookup and metadata flags."""
+
     country_dim = create_dimension(df, "country_code")
 
     def enrich(code):
@@ -136,8 +138,14 @@ def create_country_dimension(df: pd.DataFrame) -> pd.DataFrame:
         country = get_country(code)
 
         return pd.Series({
-            "country_name": SPECIAL_CODES.get(code) or (country.name if country else None),
-            "is_country": code in COUNTRY_SPECIAL_CODES or country is not None,
+            "country_name": (
+                SPECIAL_CODES.get(code)
+                or (country.name if country else None)
+            ),
+            "is_country": (
+                code in COUNTRY_SPECIAL_CODES
+                or country is not None
+            ),
             "is_time_period": YEAR_RE.search(code) is not None,
         })
 
@@ -145,10 +153,23 @@ def create_country_dimension(df: pd.DataFrame) -> pd.DataFrame:
         country_dim["country_code"].apply(enrich)
     )
 
+    print("Fetching REST Countries data...")
+
+    flag_colors = assign_flag_colors(
+        country_dim.loc[
+            country_dim["is_country"],
+            "country_name",
+        ]
+    )
+
+    country_dim["flag_color"] = (
+        country_dim["country_name"].map(flag_colors)
+    )
+
     country_dim.insert(
         0,
         "country_id",
-        range(1, len(country_dim) + 1)
+        range(1, len(country_dim) + 1),
     )
 
     return country_dim
@@ -159,11 +180,33 @@ def get_country(code: str):
     return pycountry.countries.get(alpha_2=code)
 
 
+def assign_flag_colors(
+    countries: pd.Series,
+) -> dict[str, str | None]:
+    """Assign visually distinct flag colors to countries."""
+
+    used_colors = []
+    flag_colors = {}
+
+    for country in countries:
+        color = get_country_color(country, used_colors)
+
+        flag_colors[country] = color
+
+        if color is not None:
+            used_colors.append(color)
+
+    return flag_colors
+
+
 def get_country_color(
-        country: str,
-        max_retries = 3,
-        initial_backoff = 1.0
+    country: str,
+    used_colors: list[str],
+    max_retries: int = 3,
+    initial_backoff: float = 1.0,
 ) -> str | None:
+    """Fetch country flag colors from REST Countries and select a suitable color."""
+
     for attempt in range(max_retries + 1):
         response = requests.get(
             f"https://api.restcountries.com/countries/v5?q={country}",
@@ -189,20 +232,18 @@ def get_country_color(
         data = response.json()
         colors = data["data"]["objects"][0]["flag"]["colors"]
 
-        return choose_flag_color(colors)
+        return choose_flag_color(colors, used_colors)
 
     return None
 
 
-def choose_flag_color(colors: dict) -> str | None:
+def choose_flag_color(
+        colors: dict,
+        used_colors: list[str],
+) -> str | None:
+    """Select a suitable non-white color from flag color data."""
     dominant = colors["dominant"]
     prominent = colors["prominent"]
-
-    if not is_too_close_to_white(dominant):
-        return dominant
-
-    if not is_too_close_to_white(prominent):
-        return prominent
 
     palette = sorted(
         colors["palette"],
@@ -210,14 +251,75 @@ def choose_flag_color(colors: dict) -> str | None:
         reverse=True,
     )
 
-    for color in palette:
-        if not is_too_close_to_white(color["hex"]):
-            return color["hex"]
+    swatches = {
+        key: value
+        for key, value in colors["swatches"].items()
+        if value is not None
+    }
+
+    candidates = [
+        dominant,
+        prominent,
+        *[color["hex"] for color in palette],
+        *reversed(swatches.values()),
+    ]
+
+    for candidate in candidates:
+        if is_too_close_to_white(candidate):
+            continue
+
+        if any(
+                colors_are_too_similar(candidate, used_color)
+                for used_color in used_colors
+        ):
+            continue
+
+        return candidate
+
+    # If no sufficiently distinct color is available,
+    # fall back to the first visible flag color.
+    for candidate in candidates:
+        if not is_too_close_to_white(candidate):
+            return candidate
 
     return None
 
 
-def is_too_close_to_white(hex_color: str, threshold: float = 50) -> bool:
+def colors_are_too_similar(
+    color_a: str,
+    color_b: str,
+    threshold: float = COLOR_SIMILARITY_THRESHOLD,
+) -> bool:
+    """Check whether two hex colors are too similar."""
+    color_a = color_a.lstrip("#")
+    color_b = color_b.lstrip("#")
+
+    r1, g1, b1 = (
+        int(color_a[0:2], 16),
+        int(color_a[2:4], 16),
+        int(color_a[4:6], 16),
+    )
+
+    r2, g2, b2 = (
+        int(color_b[0:2], 16),
+        int(color_b[2:4], 16),
+        int(color_b[4:6], 16),
+    )
+
+    distance = math.sqrt(
+        (r1 - r2) ** 2 +
+        (g1 - g2) ** 2 +
+        (b1 - b2) ** 2
+    )
+
+    return distance < threshold
+
+
+def is_too_close_to_white(
+        hex_color: str,
+        threshold: float = 50,
+) -> bool:
+    """Check whether a hex color is too close to white."""
     hex_color = hex_color.lstrip("#")
 
     r = int(hex_color[0:2], 16)
