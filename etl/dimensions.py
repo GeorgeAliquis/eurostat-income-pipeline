@@ -139,12 +139,12 @@ def create_country_dimension(df: pd.DataFrame) -> pd.DataFrame:
 
         return pd.Series({
             "country_name": (
-                SPECIAL_CODES.get(code)
-                or (country.name if country else None)
+                    SPECIAL_CODES.get(code)
+                    or (country.name if country else None)
             ),
             "is_country": (
-                code in COUNTRY_SPECIAL_CODES
-                or country is not None
+                    code in COUNTRY_SPECIAL_CODES
+                    or country is not None
             ),
             "is_time_period": YEAR_RE.search(code) is not None,
         })
@@ -180,9 +180,7 @@ def get_country(code: str):
     return pycountry.countries.get(alpha_2=code)
 
 
-def assign_flag_colors(
-    countries: pd.Series,
-) -> dict[str, str | None]:
+def assign_flag_colors(countries: pd.Series) -> dict[str, str | None]:
     """Assign visually distinct flag colors to countries."""
 
     used_colors = []
@@ -200,10 +198,10 @@ def assign_flag_colors(
 
 
 def get_country_color(
-    country: str,
-    used_colors: list[str],
-    max_retries: int = 3,
-    initial_backoff: float = 1.0,
+        country: str,
+        used_colors: list[str],
+        max_retries: int = 3,
+        initial_backoff: float = 1.0,
 ) -> str | None:
     """Fetch country flag colors from REST Countries and select a suitable color."""
 
@@ -286,9 +284,9 @@ def choose_flag_color(
 
 
 def colors_are_too_similar(
-    color_a: str,
-    color_b: str,
-    threshold: float = COLOR_SIMILARITY_THRESHOLD,
+        color_a: str,
+        color_b: str,
+        threshold: float = COLOR_SIMILARITY_THRESHOLD,
 ) -> bool:
     """Check whether two hex colors are too similar."""
     color_a = color_a.lstrip("#")
