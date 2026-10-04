@@ -31,7 +31,7 @@ The project combines data extraction, preparation, dimensional modeling, data wa
 
 ## Dashboard Preview
 
-![Eurostat Income Dashboard](assets/dashboard_screenshot_v3.png)
+![Eurostat Income Dashboard](assets/dashboard_screenshot_v2.png)
 
 *Interactive dashboard developed in Power BI for exploring European income distribution by country, year, age group, sex, unit, and statistic type.*
 
@@ -50,11 +50,17 @@ The project was designed to explore questions such as:
 ---
 ## Dataset
 
-**Source:** Eurostat
+**Source:** [Eurostat](https://ec.europa.eu/eurostat/)
 
-**Dataset:** `ilc_di03` – Mean and median income by age and sex
+**Dataset:** `ilc_di03` – *Mean and median income by age and sex (source: SILC)*
 
-The pipeline retrieves raw data directly from Eurostat, transforms and models it into a star schema, and loads the resulting tables into PostgreSQL for analysis.
+**Data coverage:** *1995 - 2025*
+
+The dataset is part of the **EU Statistics on Income and Living Conditions (EU-SILC)** and provides comparable statistics on income across European countries. It contains **mean and median equivalised disposable income**, broken down by **country, year, age group, and sex**, with income reported using different units of measure, including **euro and purchasing power standard (PPS)**.
+
+EU-SILC is Eurostat's reference data source for monitoring income distribution, poverty, social exclusion, and living conditions across Europe. National indicators are also used to calculate European aggregates, where sufficient population coverage is available.
+
+For this project, the `ilc_di03` dataset is extracted from Eurostat, transformed with Python and Pandas, and organized into a dimensional model before being loaded into PostgreSQL for validation and analysis. The resulting model is used as the data source for the Power BI dashboard.
 
 ---
 
