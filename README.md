@@ -1,8 +1,8 @@
 # European Income Distribution Analytics Pipeline
 
-An end-to-end **analytics and analytics engineering project** built around Eurostat's income distribution data. The project extracts and transforms European income statistics using **Python and Pandas**, organizes the data into a **dimensional star schema**, loads it into **PostgreSQL** for SQL-based validation and analysis, and delivers an interactive **Power BI dashboard** for exploring income trends across countries and demographic groups.
+An end-to-end analytics workflow for exploring **Eurostat income distribution data across European countries from 1995–2025**. The project brings together mean and median equivalised income data and enables analysis of **income trends across countries and demographic groups**, including age, sex, income unit, and statistic type.
 
-The project demonstrates a complete analytics workflow, from **public data extraction and transformation to dimensional modeling, analytical SQL, and business intelligence reporting**. It enables users to explore **mean and median equivalised disposable income** across European countries over time, with interactive analysis by **country, year, age group, sex, income unit, and statistic type**.
+The data is cleaned and transformed and modeled in a **dimensional star schema**, providing the foundation for a **Power BI report** with interactive country comparisons, income trends over time, and a European choropleth map. The project also includes **PostgreSQL-based SQL validation and analysis** of the resulting data model.
 
 **Workflow:** `Eurostat → Python/Pandas → Star Schema → PostgreSQL → SQL Analysis → Power BI`
 
@@ -10,7 +10,6 @@ The project demonstrates a complete analytics workflow, from **public data extra
 
 ## Table of Contents
 
-- [Project Overview](#project-overview)
 - [Dashboard Preview](#dashboard-preview)
 - [Analytical Questions](#analytical-questions)
 - [Dataset](#dataset)
@@ -20,16 +19,6 @@ The project demonstrates a complete analytics workflow, from **public data extra
 - [Repository Structure](#repository-structure)
 - [Technologies](#technologies)
 - [Author](#author)
-
----
-
-## Project Overview
-
-This project analyzes income distribution data from Eurostat, covering mean and median income across European countries from 1995 to 2025. The data is extracted directly from Eurostat, cleaned and transformed with Python and Pandas, modeled using a star schema, and loaded into PostgreSQL for SQL-based validation and exploratory analysis.
-
-The resulting data model is used in Power BI to enable interactive analysis of how income varies across countries and changes over time, with filtering by age group, sex, unit, and statistic type (mean / median).
- 
-The project combines data extraction, preparation, dimensional modeling, data warehousing, SQL analysis, and business intelligence into an end-to-end analytics workflow.
 
 ---
 
@@ -78,12 +67,12 @@ The Power BI dashboard enables users to explore income distribution across Europ
 - Income evolution over time (1995–2025)
 - Interactive European choropleth map
 - Filtering by:
-  - Country
-  - Year
   - Age group
   - Sex
   - Unit
   - Statistic type (Mean / Median)
+  - Countries (for trend comparisons)
+  - Year (for the choropleth map)
 
 ### Dashboard Visualizations
 
