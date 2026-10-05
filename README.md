@@ -54,7 +54,7 @@ The project was designed to explore questions such as:
 
 **Dataset:** `ilc_di03` – *Mean and median income by age and sex (source: SILC)*
 
-**Data coverage:** *1995 - 2025*
+**Data coverage:** 1995 – 2025
 
 The dataset is part of the **EU Statistics on Income and Living Conditions (EU-SILC)** and provides comparable statistics on income across European countries. It contains **mean and median equivalised disposable income**, broken down by **country, year, age group, and sex**, with income reported using different units of measure, including **euro and purchasing power standard (PPS)**.
 
