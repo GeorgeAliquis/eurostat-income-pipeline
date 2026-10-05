@@ -1,6 +1,10 @@
 # European Income Distribution Analytics Pipeline
 
-An end-to-end data analytics and business intelligence project using publicly available Eurostat income distribution data.  The project covers data extraction, preparation, dimensional modeling, SQL analysis, and interactive dashboard development in Power BI.
+An end-to-end **analytics and analytics engineering project** built around Eurostat's income distribution data. The project extracts and transforms European income statistics using **Python and Pandas**, organizes the data into a **dimensional star schema**, loads it into **PostgreSQL** for SQL-based validation and analysis, and delivers an interactive **Power BI dashboard** for exploring income trends across countries and demographic groups.
+
+The project demonstrates a complete analytics workflow, from **public data extraction and transformation to dimensional modeling, analytical SQL, and business intelligence reporting**. It enables users to explore **mean and median equivalised disposable income** across European countries over time, with interactive analysis by **country, year, age group, sex, income unit, and statistic type**.
+
+**Workflow:** `Eurostat → Python/Pandas → Star Schema → PostgreSQL → SQL Analysis → Power BI`
 
 ---
 
