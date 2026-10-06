@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parent.parent
 ENV_FILE = ROOT / ".env"
 DATA_DIR = ROOT / "data"
 
+COUNTRY_DATA_DIR = DATA_DIR / "country_data"
 RAW_DATA_DIR = DATA_DIR / "raw"
 PROCESSED_DATA_DIR = DATA_DIR / "processed"
 

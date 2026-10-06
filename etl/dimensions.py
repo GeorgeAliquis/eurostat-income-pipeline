@@ -6,13 +6,15 @@ import math
 import os
 import re
 import time
+import json
+from pathlib import Path
 
 import pandas as pd
 import pycountry
 import requests
 from dotenv import load_dotenv
 
-from etl.paths import ENV_FILE
+from etl.paths import ENV_FILE, COUNTRY_DATA_DIR
 
 COUNTRY_SPECIAL_CODES = {"EL", "UK", "XK"}
 
@@ -32,6 +34,44 @@ SPECIAL_CODES = {
     "EU27_2007": "European Union (2007–2013)",
     "EU28": "European Union (2013–2020)",
     "EU27_2020": "European Union (from 2020)",
+}
+
+SEX_ORDER = {
+    "T": 0,
+    "M": 1,
+    "F": 2,
+}
+
+STATINFO_ORDER = {
+    "MEAN_EI": 0,
+    "MED_EI": 1,
+}
+
+UNIT_ORDER = {
+    "EUR": 0,
+    "PPS": 1,
+    "NAC": 2,
+}
+
+AGGREGATE_ORDER = {
+    "Euro area": 0,
+    "Euro area (2014)": 1,
+    "Euro area (2015–2022)": 2,
+    "Euro area (2023–2025)": 3,
+    "Euro area (from 2026)": 4,
+    "European Union": 5,
+    "European Union (1995–2004)": 6,
+    "European Union (2007–2013)": 7,
+    "European Union (2013–2020)": 8,
+    "European Union (from 2020)": 9,
+}
+
+AGE_TYPE_ORDER = {
+    "TOTAL": 0,
+    "RANGE": 1,
+    "OPEN_ENDED": 2,
+    "UPPER_BOUNDED": 3,
+    "OTHER": 99,
 }
 
 load_dotenv(dotenv_path=ENV_FILE)
@@ -70,8 +110,7 @@ def create_base_dimension(df: pd.DataFrame, col: str) -> pd.DataFrame:
     """
     Create a clean base table from a single dataframe column.
 
-    The function validates that the column exists, removes duplicate values,
-    and sorts the result further dimension processing.
+    The function validates that the column exists and removes duplicate values.
     """
     if col not in df.columns:
         raise ValueError(f"Missing column: {col}")
@@ -79,7 +118,6 @@ def create_base_dimension(df: pd.DataFrame, col: str) -> pd.DataFrame:
     return (
         df[[col]]
         .drop_duplicates()
-        .sort_values(col)
         .reset_index(drop=True)
     )
 
@@ -98,12 +136,7 @@ def create_statinfo_dimension(df: pd.DataFrame) -> pd.DataFrame:
         "MED_EI": "Median",
     })
 
-    statinfo_order = {
-        "MEAN_EI": 1,
-        "MED_EI": 2,
-    }
-
-    statinfo_dim["_sort_order"] = statinfo_dim["statinfo"].map(statinfo_order)
+    statinfo_dim["_sort_order"] = statinfo_dim["statinfo"].map(STATINFO_ORDER)
 
     statinfo_dim = (
         statinfo_dim
@@ -136,13 +169,7 @@ def create_unit_dimension(df: pd.DataFrame) -> pd.DataFrame:
         "PPS": "Purchasing Power Standard",
     })
 
-    unit_order = {
-        "EUR": 1,
-        "PPS": 2,
-        "NAC": 3,
-    }
-
-    unit_dim["_sort_order"] = unit_dim["unit"].map(unit_order)
+    unit_dim["_sort_order"] = unit_dim["unit"].map(UNIT_ORDER)
 
     unit_dim = (
         unit_dim
@@ -175,13 +202,7 @@ def create_sex_dimension(df: pd.DataFrame) -> pd.DataFrame:
         "F": "Female",
     })
 
-    sex_order = {
-        "T": 1,
-        "M": 2,
-        "F": 3,
-    }
-
-    sex_dim["_sort_order"] = sex_dim["sex"].map(sex_order)
+    sex_dim["_sort_order"] = sex_dim["sex"].map(SEX_ORDER)
 
     sex_dim = (
         sex_dim
@@ -255,21 +276,8 @@ def create_country_dimension(
     elif include_flag_colors:
         print("Skipping flag colors: REST_COUNTRIES_API_KEY is not configured.")
 
-    aggregate_order = {
-        "Euro area": 1,
-        "Euro area (2014)": 2,
-        "Euro area (2015–2022)": 3,
-        "Euro area (2023–2025)": 4,
-        "Euro area (from 2026)": 5,
-        "European Union": 6,
-        "European Union (1995–2004)": 7,
-        "European Union (2007–2013)": 8,
-        "European Union (2013–2020)": 9,
-        "European Union (from 2020)": 10,
-    }
-
     country_dim["_sort_group"] = country_dim["is_country"].map({True: 0, False: 1})
-    country_dim["_sort_order"] = country_dim["country_name"].map(aggregate_order)
+    country_dim["_sort_order"] = country_dim["country_name"].map(AGGREGATE_ORDER)
 
     country_dim = (
         country_dim.sort_values(
@@ -307,12 +315,11 @@ def assign_flag_colors(countries: pd.Series) -> dict[str, str | None]:
     Countries are processed sequentially so previously selected colors
     can be considered when choosing colors for subsequent countries.
     """
-
     used_colors = []
     flag_colors = {}
 
     for country in countries:
-        colors = fetch_country_colors(country)
+        colors = get_country_colors(country)
         color = choose_flag_color(colors, used_colors)
 
         flag_colors[country] = color
@@ -323,18 +330,66 @@ def assign_flag_colors(countries: pd.Series) -> dict[str, str | None]:
     return flag_colors
 
 
-def fetch_country_colors(
+def get_country_colors(
+        country: str,
+        path: Path = COUNTRY_DATA_DIR,
+) -> dict | None:
+    """
+    Get flag color data for a country, using cached data when available.
+
+    The cached country data is loaded first. If no cached color data is found,
+    the country data is fetched from the REST Countries API.
+    """
+    cache_name = country.strip().lower()
+    country_data_path = path / f"{cache_name}.json"
+
+    if country_data_path.exists():
+        data = load_country_data(country_data_path)
+    else:
+        data = fetch_country_data(country)
+
+        if data is None:
+            return None
+
+        save_country_data(data, country_data_path)
+
+    return extract_flag_colors(data)
+
+
+def save_country_data(data: dict, path: Path) -> None:
+    """
+    Save country API data to a JSON cache file.
+
+    The parent directory is created if it does not already exist.
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+
+    with path.open("w", encoding="utf-8") as file:
+        json.dump(data, file, indent=4, ensure_ascii=False)
+
+
+def load_country_data(country_data_path: Path) -> dict | None:
+    """
+    Load data for a country from a cached JSON response.
+
+    The JSON file is expected to be named after the lowercase country name
+    and contain the response structure returned by the REST countries API.
+    """
+    with country_data_path.open("r", encoding="utf-8") as file:
+        return json.load(file)
+
+
+def fetch_country_data(
         country: str,
         max_retries: int = 3,
         initial_backoff: float = 1.0,
 ) -> dict | None:
     """
-    Fetch flag color information for a country from the REST Countries API.
+    Fetch data for a country from the REST Countries API.
 
     The request is retried when the API returns a rate-limit response,
     using Retry-After or exponential backoff before trying again.
     """
-
     for attempt in range(max_retries + 1):
         response = requests.get(
             f"https://api.restcountries.com/countries/v5?q={country}",
@@ -342,14 +397,17 @@ def fetch_country_colors(
             timeout=20,
         )
 
-        if response.status_code == 429:
+        if response.status_code in {429, 500, 502, 503, 504}:
             if attempt == max_retries:
                 response.raise_for_status()
 
             retry_after = response.headers.get("Retry-After")
 
             if retry_after is not None:
-                wait_time = float(retry_after)
+                try:
+                    wait_time = float(retry_after)
+                except ValueError:
+                    wait_time = initial_backoff * (2 ** attempt)
             else:
                 wait_time = initial_backoff * (2 ** attempt)
 
@@ -359,16 +417,26 @@ def fetch_country_colors(
         response.raise_for_status()
 
         data = response.json()
-        objects = data.get("data", {}).get("objects", [])
 
-        if not objects:
+        if not data:
             return None
 
-        colors = objects[0].get("flag", {}).get("colors")
-
-        return colors if colors else None
+        return data
 
     return None
+
+
+def extract_flag_colors(data: dict | None) -> dict | None:
+    """Extract flag color data for a country from an API response."""
+    if data is None:
+        return None
+
+    objects = data.get("data", {}).get("objects", [])
+
+    if not objects:
+        return None
+
+    return objects[0].get("flag", {}).get("colors")
 
 
 def choose_flag_color(
@@ -520,12 +588,7 @@ def create_age_dimension(df: pd.DataFrame) -> pd.DataFrame:
         axis="columns"
     )
 
-    age_dim["_type_order"] = age_dim["age_type"].map({
-        "TOTAL": 1,
-        "RANGE": 2,
-        "OPEN_ENDED": 3,
-        "UPPER_BOUNDED": 4,
-    })
+    age_dim["_type_order"] = age_dim["age_type"].map(AGE_TYPE_ORDER)
 
     age_dim["_age_sort"] = age_dim["min_age"].fillna(age_dim["max_age"])
 
