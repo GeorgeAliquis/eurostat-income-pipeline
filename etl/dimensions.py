@@ -225,11 +225,18 @@ def create_country_dimension(
         include_flag_colors: bool = False,
 ) -> pd.DataFrame:
     """
-    Create the country dimension with names, classification flags, and colors.
+    Create the country dimension with names, classification flags, and
+    optional flag-derived colors.
 
     Country codes are mapped to standard or custom names, including Eurostat
-    special codes and European aggregates. Flag colors can optionally be
-    retrieved from the REST Countries API when enabled and configured.
+    special codes and European aggregates. When enabled, ``flag_color`` is
+    populated with a representative color derived from each country's flag.
+    These colors are used in Power BI trend-line charts to provide consistent,
+    recognizable colors for countries instead of relying on Power BI's
+    automatically assigned colors.
+
+    Flag colors are retrieved from the REST Countries API and cached locally
+    when the API key is configured.
     """
     country_dim = create_base_dimension(df, "country_code")
 
