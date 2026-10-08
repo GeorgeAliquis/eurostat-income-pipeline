@@ -1,41 +1,41 @@
 country_id,country_code,country_name,is_country,flag_color
 1,AL,Albania,True,#010000
 2,AT,Austria,True,#c8102d
-3,BE,Belgium,True,#000000
+3,BE,Belgium,True,#ef343f
 4,BG,Bulgaria,True,#24986f
 5,HR,Croatia,True,#092090
-6,CY,Cyprus,True,#4b592b
+6,CY,Cyprus,True,#d87d00
 7,CZ,Czechia,True,#17477d
-8,DK,Denmark,True,#c30c10
+8,DK,Denmark,True,#6b6f00
 9,EE,Estonia,True,#0e70d0
-10,FI,Finland,True,#003370
+10,FI,Finland,True,#0c2163
 11,FR,France,True,#002654
 12,DE,Germany,True,#860507
 13,EL,Greece,True,#6f79d9
 14,HU,Hungary,True,#e16d76
-15,IS,Iceland,True,#df2420
+15,IS,Iceland,True,#0255a4
 16,IE,Ireland,True,#119b62
-17,IT,Italy,True,#009246
+17,IT,Italy,True,#008a3c
 18,XK,Kosovo,True,#2b4daa
 19,LV,Latvia,True,#9d2134
-20,LT,Lithuania,True,#bf1e1b
-21,LU,Luxembourg,True,#ef2824
-22,MT,Malta,True,#948d00
+20,LT,Lithuania,True,#638836
+21,LU,Luxembourg,True,#2295dd
+22,MT,Malta,True,#c82f49
 23,ME,Montenegro,True,#e31316
-24,NL,Netherlands,True,#14308c
-25,MK,North Macedonia,True,#dd231f
-26,NO,Norway,True,#bd1b3e
+24,NL,Netherlands,True,#121922
+25,MK,North Macedonia,True,#df6132
+26,NO,Norway,True,#54668f
 27,PL,Poland,True,#dc163e
 28,PT,Portugal,True,#166b00
-29,RO,Romania,True,#d31b0f
-30,RS,Serbia,True,#092090
+29,RO,Romania,True,#7c5b37
+30,RS,Serbia,True,#a08d38
 31,SK,Slovakia,True,#0054a3
 32,SI,Slovenia,True,#1400ff
 33,ES,Spain,True,#897659
 34,SE,Sweden,True,#054d93
-35,CH,Switzerland,True,#ec5a00
+35,CH,Switzerland,True,#ff1419
 36,TR,Türkiye,True,#e31316
-37,UK,United Kingdom,True,#0c226c
+37,UK,United Kingdom,True,#767da7
 38,EA,Euro area,False,
 39,EA18,Euro area (2014),False,
 40,EA19,Euro area (2015–2022),False,

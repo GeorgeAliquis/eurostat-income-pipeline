@@ -454,7 +454,9 @@ def choose_flag_color(
     Select a suitable flag color for a chart series.
 
     Candidate colors are evaluated based on prominence, contrast, and
-    similarity to colors already assigned to other countries.
+    similarity to colors already assigned to other countries. A second,
+    more relaxed similarity pass is used when no sufficiently distinct
+    color can be found during the first pass.
     """
     if colors is None:
         return None
@@ -462,11 +464,13 @@ def choose_flag_color(
     dominant = colors["dominant"]
     prominent = colors["prominent"]
 
-    palette = sorted(
+    palette = [
+        color["hex"]
+        for color in sorted(
         colors["palette"],
         key=lambda x: x["proportion"],
         reverse=True,
-    )
+    )]
 
     swatches = {
         key: value
@@ -483,10 +487,11 @@ def choose_flag_color(
     candidates = [
         dominant,
         prominent,
-        *[color["hex"] for color in palette],
+        *palette,
         *swatches.values(),
     ]
 
+    # First pass: strict similarity threshold
     for candidate in candidates:
         if is_visually_too_light(candidate):
             continue
@@ -499,13 +504,26 @@ def choose_flag_color(
 
         return candidate
 
+    # Second pass: relaxed similarity threshold
+    for candidate in [*palette, *swatches.values()]:
+        if is_visually_too_light(candidate):
+            continue
+
+        if any(
+                colors_are_too_similar(candidate, used_color, threshold=40)
+                for used_color in used_colors
+        ):
+            continue
+
+        return candidate
+
     # If no sufficiently distinct color is available,
     # fall back to the first color that is not visually too light.
     for candidate in candidates:
         if not is_visually_too_light(candidate):
             return candidate
 
-    return dominant or None
+    return None
 
 
 def colors_are_too_similar(
