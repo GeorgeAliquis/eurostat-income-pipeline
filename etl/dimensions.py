@@ -505,7 +505,7 @@ def choose_flag_color(
         return candidate
 
     # Second pass: relaxed similarity threshold
-    for candidate in [*palette, *swatches.values()]:
+    for candidate in candidates:
         if is_visually_too_light(candidate):
             continue
 
@@ -519,7 +519,7 @@ def choose_flag_color(
 
     # If no sufficiently distinct color is available,
     # fall back to the first color that is not visually too light.
-    for candidate in candidates:
+    for candidate in [*palette, *swatches.values()]:
         if not is_visually_too_light(candidate):
             return candidate
 
