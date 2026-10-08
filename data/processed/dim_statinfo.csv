@@ -1,3 +1,3 @@
 statinfo_id,statinfo,statinfo_label
-1,MEAN_EI,Average Equivalised Income
-2,MED_EI,Median Equivalised Income
+1,MEAN_EI,Mean
+2,MED_EI,Median

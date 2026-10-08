@@ -1,27 +1,13 @@
 -- ==========================================================
 -- EUROSTAT INCOME DATA ANALYTICAL VIEW
 -- ==========================================================
--- Purpose:
--- Provide denormalized, analyst-friendly views on top
--- of the dimensional warehouse.
---------------------------------
-
--- ==========================================================
-
--- ==========================================================
--- VIEW: vw_income_analysis
--- ==========================================================
 -- Grain:
--- One row per:
--- country × age × sex × unit × statinfo × year
------------------------------------------------
-
+--   One row per country × age × sex × unit × statinfo × year
+--
 -- Purpose:
--- Simplify analytical queries by exposing descriptive
--- dimension attributes alongside fact measures.
+--   Provide a denormalized, analyst-friendly view over the
+--   dimensional warehouse.
 -- ==========================================================
-
-DROP VIEW IF EXISTS vw_income_analysis;
 
 CREATE VIEW vw_income_analysis AS
 SELECT
@@ -35,7 +21,7 @@ SELECT
 	c.country_code,
 	c.country_name,
 	c.is_country,
-	c.is_time_period,
+	c.flag_color,
 
 	-- Age dimension
 	a.age_id,
