@@ -36,6 +36,19 @@ SPECIAL_CODES = {
     "EU27_2020": "European Union (from 2020)",
 }
 
+AGGREGATE_ORDER = {
+    "Euro area": 0,
+    "Euro area (2014)": 1,
+    "Euro area (2015–2022)": 2,
+    "Euro area (2023–2025)": 3,
+    "Euro area (from 2026)": 4,
+    "European Union": 5,
+    "European Union (1995–2004)": 6,
+    "European Union (2007–2013)": 7,
+    "European Union (2013–2020)": 8,
+    "European Union (from 2020)": 9,
+}
+
 SEX_ORDER = {
     "T": 0,
     "M": 1,
@@ -51,19 +64,6 @@ UNIT_ORDER = {
     "EUR": 0,
     "PPS": 1,
     "NAC": 2,
-}
-
-AGGREGATE_ORDER = {
-    "Euro area": 0,
-    "Euro area (2014)": 1,
-    "Euro area (2015–2022)": 2,
-    "Euro area (2023–2025)": 3,
-    "Euro area (from 2026)": 4,
-    "European Union": 5,
-    "European Union (1995–2004)": 6,
-    "European Union (2007–2013)": 7,
-    "European Union (2013–2020)": 8,
-    "European Union (from 2020)": 9,
 }
 
 AGE_TYPE_ORDER = {

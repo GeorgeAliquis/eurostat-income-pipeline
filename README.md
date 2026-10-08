@@ -1,8 +1,8 @@
 # European Income Distribution Analytics Pipeline
 
-An end-to-end analytics workflow for exploring **Eurostat income distribution data across European countries from 1995–2025**. The project brings together mean and median equivalised income data and enables analysis of **income trends across countries and demographic groups**, including age, sex, income unit, and statistic type.
+An end-to-end analytics workflow for exploring **Eurostat income distribution data across European countries from 1995 to 2025**. The project brings together mean and median equivalised income data and enables analysis of **income trends across countries and demographic groups**, including age and sex, as well as different income measures, including euros and purchasing power standards (PPS).
 
-The data is cleaned and transformed and modeled in a **dimensional star schema**, providing the foundation for a **Power BI report** with interactive country comparisons, income trends over time, and a European choropleth map. The project also includes **PostgreSQL-based SQL validation and analysis** of the resulting data model.
+The data is cleaned, transformed and modeled in a **dimensional star schema**, providing the foundation for a **Power BI report** with interactive country comparisons, income trends over time, and a European choropleth map. The project also includes **PostgreSQL-based SQL validation and analysis** of the resulting data model.
 
 **Workflow:** `Eurostat → Python/Pandas → Star Schema → PostgreSQL → SQL Analysis → Power BI`
 
