@@ -1,8 +1,5 @@
 from pathlib import Path
 
-# ==========================
-# PATHS & URLS
-# ==========================
 EUROSTAT_URL = "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/ilc_di03?format=TSV"
 
 ROOT = Path(__file__).resolve().parent.parent

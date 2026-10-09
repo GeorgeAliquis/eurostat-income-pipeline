@@ -1,6 +1,6 @@
 """
-ETL pipeline for transforming raw income data into a cleaned fact table and
-associated dimension tables.
+ETL pipeline for transforming raw income data into a cleaned fact table
+and associated dimension tables.
 """
 import pandas as pd
 
@@ -51,8 +51,7 @@ def expand_info_column(df: pd.DataFrame) -> pd.DataFrame:
 
     Returns
     -------
-    DataFrame
-        DataFrame with expanded metadata columns and no original packed column.
+    DataFrame with expanded metadata columns and no original packed column.
     """
     info_column = df.columns[0]
 
@@ -132,8 +131,7 @@ def extract_flags(df: pd.DataFrame) -> pd.DataFrame:
 
     Returns
     -------
-    DataFrame
-        DataFrame with:
+    DataFrame with:
         - income (numeric value as string at this stage)
         - flag (optional metadata indicator)
     """
@@ -143,7 +141,7 @@ def extract_flags(df: pd.DataFrame) -> pd.DataFrame:
     )
 
     return df.assign(
-        income=split[0].astype(float),
+        income=split[0].astype("Int64"),
         flag=split[1],
     )
 
