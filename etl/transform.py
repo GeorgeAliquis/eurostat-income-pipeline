@@ -8,7 +8,6 @@ from etl.paths import RAW_DATASET, PROCESSED_DATA_DIR
 from etl.dimensions import create_dimensions
 
 COLUMN_RENAMES = {
-    "age": "age_group",
     "geo\\TIME_PERIOD": "country_code",
 }
 
@@ -26,7 +25,7 @@ DIMENSION_KEYS = {
     "sex": ("sex", "sex_id"),
     "unit": ("unit", "unit_id"),
     "statinfo": ("statinfo", "statinfo_id"),
-    "age": ("age_group", "age_id"),
+    "age": ("age", "age_id"),
 }
 
 FACT_COLUMNS = [
@@ -40,6 +39,13 @@ FACT_COLUMNS = [
     "flag",
 ]
 
+GROUP_COLS = [
+    "year",
+    "sex_id",
+    "age_id",
+    "unit_id",
+    "statinfo_id",
+]
 
 def expand_info_column(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -163,7 +169,7 @@ def sort_values(df: pd.DataFrame) -> pd.DataFrame:
         "sex": True,
         "country_code": True,
         "statinfo": True,
-        "age_group": True,
+        "age": True,
         "unit": True,
     }
 

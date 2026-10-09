@@ -25,7 +25,7 @@ SELECT
 
 	-- Age dimension
 	a.age_id,
-	a.age_group,
+	a.age,
 	a.age_label,
 	a.min_age,
 	a.max_age,

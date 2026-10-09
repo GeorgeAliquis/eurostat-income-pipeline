@@ -33,7 +33,7 @@ FROM vw_income_analysis;
 
 SELECT
 	COUNT(DISTINCT country_code) AS countries,
-	COUNT(DISTINCT age_group) AS age_groups,
+	COUNT(DISTINCT age) AS age_groups,
 	COUNT(DISTINCT sex) AS sex_categories,
 	COUNT(DISTINCT unit) AS units,
 	COUNT(DISTINCT statinfo) AS statistics
@@ -78,7 +78,7 @@ FROM (
         ) AS rn
     FROM vw_income_analysis
     WHERE
-        age_group = 'TOTAL'
+        age = 'TOTAL'
         AND sex = 'T'
         AND statinfo = 'MEAN_EI'
         AND unit = 'PPS'
@@ -108,7 +108,7 @@ FROM (
         ) AS rn
     FROM vw_income_analysis
     WHERE
-        age_group = 'TOTAL'
+        age = 'TOTAL'
         AND sex = 'T'
         AND statinfo = 'MEAN_EI'
         AND unit = 'PPS'
@@ -135,7 +135,7 @@ WHERE
 		SELECT MAX(year)
 		FROM vw_income_analysis
 	)
-	AND age_group = 'TOTAL'
+	AND age = 'TOTAL'
 	AND sex = 'T'
 	AND statinfo = 'MEAN_EI'
 	AND unit = 'PPS'
@@ -157,7 +157,7 @@ WITH ranked AS (
         ) AS rn
     FROM vw_income_analysis
     WHERE
-        age_group = 'TOTAL'
+        age = 'TOTAL'
         AND statinfo = 'MED_EI'
         AND unit = 'EUR'
         AND sex IN ('M', 'F')
@@ -233,7 +233,7 @@ SELECT
 	income
 FROM vw_income_analysis
 WHERE
-	age_group IN (
+	age IN (
 		'Y16-24',
 		'Y_GE65'
 	)
@@ -257,7 +257,7 @@ WITH valid_years AS (
         year
     FROM vw_income_analysis
     WHERE
-        age_group = 'TOTAL'
+        age = 'TOTAL'
         AND sex = 'T'
         AND unit = 'EUR'
         AND is_country = TRUE
@@ -282,7 +282,7 @@ filtered AS (
       ON a.country_name = y.country_name
      AND a.year = y.year
     WHERE
-        a.age_group = 'TOTAL'
+        a.age = 'TOTAL'
         AND a.sex = 'T'
         AND a.unit = 'EUR'
         AND a.is_country = TRUE
@@ -320,7 +320,7 @@ SELECT
 FROM vw_income_analysis
 
 WHERE
-	age_group = 'TOTAL'
+	age = 'TOTAL'
 	AND sex = 'T'
 	AND statinfo = 'MEAN_EI'
 	AND unit = 'EUR'
@@ -346,7 +346,7 @@ SELECT
 FROM vw_income_analysis
 
 WHERE
-	age_group = 'TOTAL'
+	age = 'TOTAL'
 	AND sex = 'T'
 	AND statinfo = 'MED_EI'
 	AND unit = 'PPS'
@@ -376,7 +376,7 @@ SELECT
 FROM vw_income_analysis
 
 WHERE
-    age_group = 'TOTAL'
+    age = 'TOTAL'
     AND sex = 'T'
     AND statinfo = 'MED_EI'
     AND unit = 'PPS'

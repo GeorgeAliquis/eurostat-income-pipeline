@@ -76,9 +76,9 @@ FROM dim_country
 GROUP BY country_code
 HAVING COUNT(*) > 1;
 
-SELECT age_group, COUNT(*)
+SELECT age, COUNT(*)
 FROM dim_age
-GROUP BY age_group
+GROUP BY age
 HAVING COUNT(*) > 1;
 
 SELECT sex, COUNT(*)

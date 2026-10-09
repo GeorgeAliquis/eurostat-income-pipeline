@@ -604,9 +604,9 @@ def create_age_dimension(df: pd.DataFrame) -> pd.DataFrame:
     Age group codes are converted into structured age information and
     ordered by age category and numeric boundary for consistent presentation.
     """
-    age_dim = create_base_dimension(df, "age_group")
+    age_dim = create_base_dimension(df, "age")
 
-    age_info = age_dim["age_group"].apply(parse_age_group)
+    age_info = age_dim["age"].apply(parse_age_group)
 
     age_dim = pd.concat(
         [age_dim, age_info.apply(pd.Series)],

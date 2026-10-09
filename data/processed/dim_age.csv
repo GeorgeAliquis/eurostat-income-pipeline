@@ -1,4 +1,4 @@
-age_id,age_group,min_age,max_age,age_type,age_label
+age_id,age,min_age,max_age,age_type,age_label
 1,TOTAL,,,TOTAL,All ages
 2,Y6-11,6.0,11.0,RANGE,6–11
 3,Y6-10,6.0,10.0,RANGE,6–10
