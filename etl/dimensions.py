@@ -467,9 +467,9 @@ def choose_flag_color(
     palette = [
         color["hex"]
         for color in sorted(
-        colors["palette"],
-        key=lambda x: x["proportion"],
-        reverse=True,
+            colors["palette"],
+            key=lambda x: x["proportion"],
+            reverse=True,
     )]
 
     swatches = {
@@ -523,7 +523,7 @@ def choose_flag_color(
         if not is_visually_too_light(candidate):
             return candidate
 
-    return None
+    return dominant or prominent
 
 
 def colors_are_too_similar(
