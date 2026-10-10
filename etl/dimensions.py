@@ -122,6 +122,21 @@ def create_base_dimension(df: pd.DataFrame, col: str) -> pd.DataFrame:
     )
 
 
+def insert_id_column(
+        dimension: pd.DataFrame,
+        column_name: str,
+        loc: int = 0,
+        start: int = 1,
+) -> pd.DataFrame:
+    """Insert a sequential surrogate key and return the dimension."""
+    dimension.insert(
+        loc,
+        column_name,
+        range(start, start + len(dimension)),
+    )
+    return dimension
+
+
 def create_statinfo_dimension(df: pd.DataFrame) -> pd.DataFrame:
     """
     Create the statistical information dimension with labels and surrogate keys.
@@ -143,12 +158,7 @@ def create_statinfo_dimension(df: pd.DataFrame) -> pd.DataFrame:
         .sort_values(by=["_sort_order"])
         .drop(columns=["_sort_order"])
         .reset_index(drop=True)
-    )
-
-    statinfo_dim.insert(
-        0,
-        "statinfo_id",
-        range(1, len(statinfo_dim) + 1)
+        .pipe(insert_id_column, "statinfo_id")
     )
 
     return statinfo_dim
@@ -176,12 +186,7 @@ def create_unit_dimension(df: pd.DataFrame) -> pd.DataFrame:
         .sort_values(by=["_sort_order"])
         .drop(columns=["_sort_order"])
         .reset_index(drop=True)
-    )
-
-    unit_dim.insert(
-        0,
-        "unit_id",
-        range(1, len(unit_dim) + 1)
+        .pipe(insert_id_column, "unit_id")
     )
 
     return unit_dim
@@ -209,12 +214,7 @@ def create_sex_dimension(df: pd.DataFrame) -> pd.DataFrame:
         .sort_values(by=["_sort_order"])
         .drop(columns=["_sort_order"])
         .reset_index(drop=True)
-    )
-
-    sex_dim.insert(
-        0,
-        "sex_id",
-        range(1, len(sex_dim) + 1)
+        .pipe(insert_id_column, "sex_id")
     )
 
     return sex_dim
@@ -294,12 +294,7 @@ def create_country_dimension(
         )
         .drop(columns=["_sort_group", "_sort_order"])
         .reset_index(drop=True)
-    )
-
-    country_dim.insert(
-        0,
-        "country_id",
-        range(1, len(country_dim) + 1),
+        .pipe(insert_id_column, "country_id")
     )
 
     return country_dim
@@ -625,12 +620,7 @@ def create_age_dimension(df: pd.DataFrame) -> pd.DataFrame:
         )
         .drop(columns=["_type_order", "_age_sort"])
         .reset_index(drop=True)
-    )
-
-    age_dim.insert(
-        0,
-        "age_id",
-        range(1, len(age_dim) + 1)
+        .pipe(insert_id_column, "age_id")
     )
 
     return age_dim
@@ -681,3 +671,44 @@ def parse_age_group(age_code: str) -> dict:
         "age_type": "OTHER",
         "age_label": "Other"
     }
+
+
+def build_dim_aggregate() -> pd.DataFrame:
+    return pd.DataFrame([
+        {
+            "country_code": "P10",
+            "country_name": "International P10",
+            "is_country": False,
+            "flag_color": "#4E79A7",
+        },
+        {
+            "country_code": "P25",
+            "country_name": "International P25",
+            "is_country": False,
+            "flag_color": "#59A14F",
+        },
+        {
+            "country_code": "P50",
+            "country_name": "International Median (P50)",
+            "is_country": False,
+            "flag_color": "#E15759",
+        },
+        {
+            "country_code": "P75",
+            "country_name": "International P75",
+            "is_country": False,
+            "flag_color": "#F28E2B",
+        },
+        {
+            "country_code": "P90",
+            "country_name": "International P90",
+            "is_country": False,
+            "flag_color": "#B07AA1",
+        },
+        {
+            "country_code": "MEAN",
+            "country_name": "International Mean",
+            "is_country": False,
+            "flag_color": "#76B7B2",
+        },
+    ])
