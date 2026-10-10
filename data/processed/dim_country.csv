@@ -36,13 +36,19 @@ country_id,country_code,country_name,is_country,flag_color
 35,CH,Switzerland,True,#ff1419
 36,TR,Türkiye,True,#e31316
 37,UK,United Kingdom,True,#767da7
-38,EA,Euro area,False,
-39,EA18,Euro area (2014),False,
-40,EA19,Euro area (2015–2022),False,
-41,EA20,Euro area (2023–2025),False,
-42,EA21,Euro area (from 2026),False,
-43,EU,European Union,False,
-44,EU15,European Union (1995–2004),False,
-45,EU27_2007,European Union (2007–2013),False,
-46,EU28,European Union (2013–2020),False,
-47,EU27_2020,European Union (from 2020),False,
+38,EA,Euro area,False,#167D8D
+39,EA18,Euro area (2014),False,#4697A3
+40,EA19,Euro area (2015–2022),False,#4697A3
+41,EA20,Euro area (2023–2025),False,#4697A3
+42,EA21,Euro area (from 2026),False,#4697A3
+43,EU,European Union,False,#2457A6
+44,EU15,European Union (1995–2004),False,#6486BC
+45,EU27_2007,European Union (2007–2013),False,#6486BC
+46,EU28,European Union (2013–2020),False,#6486BC
+47,EU27_2020,European Union (from 2020),False,#6486BC
+48,P10,Europe 10th Percentile,False,#C9B8E8
+49,P25,Europe 25th Percentile,False,#B49ADD
+50,P50,Europe Median,False,#9673CC
+51,P75,Europe 75th Percentile,False,#7549B5
+52,P90,Europe 90th Percentile,False,#54258F
+53,MEAN,Europe Average,False,#8860B8

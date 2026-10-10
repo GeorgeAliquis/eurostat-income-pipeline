@@ -36,6 +36,19 @@ SPECIAL_CODES = {
     "EU27_2020": "European Union (from 2020)",
 }
 
+AGGREGATE_COLORS = {
+    "Euro area": "#167D8D",
+    "Euro area (2014)": "#4697A3",
+    "Euro area (2015–2022)": "#4697A3",
+    "Euro area (2023–2025)": "#4697A3",
+    "Euro area (from 2026)": "#4697A3",
+    "European Union": "#2457A6",
+    "European Union (1995–2004)": "#6486BC",
+    "European Union (2007–2013)": "#6486BC",
+    "European Union (2013–2020)": "#6486BC",
+    "European Union (from 2020)": "#6486BC",
+}
+
 AGGREGATE_ORDER = {
     "Euro area": 0,
     "Euro area (2014)": 1,
@@ -98,7 +111,7 @@ def create_dimensions(df: pd.DataFrame) -> dict[str, pd.DataFrame]:
     labels, ordering attributes, and surrogate keys where needed.
     """
     return {
-        "country": create_country_dimension(df, include_flag_colors=True),
+        "country": create_country_dimension(df),
         "sex": create_sex_dimension(df),
         "unit": create_unit_dimension(df),
         "statinfo": create_statinfo_dimension(df),
@@ -125,8 +138,8 @@ def create_base_dimension(df: pd.DataFrame, col: str) -> pd.DataFrame:
 def insert_id_column(
         dimension: pd.DataFrame,
         column_name: str,
-        loc: int = 0,
         start: int = 1,
+        loc: int = 0,
 ) -> pd.DataFrame:
     """Insert a sequential surrogate key and return the dimension."""
     dimension.insert(
@@ -220,10 +233,7 @@ def create_sex_dimension(df: pd.DataFrame) -> pd.DataFrame:
     return sex_dim
 
 
-def create_country_dimension(
-        df: pd.DataFrame,
-        include_flag_colors: bool = False,
-) -> pd.DataFrame:
+def create_country_dimension(df: pd.DataFrame) -> pd.DataFrame:
     """
     Create the country dimension with names, classification flags, and
     optional flag-derived colors.
@@ -266,7 +276,7 @@ def create_country_dimension(
 
     country_dim["flag_color"] = None
 
-    if include_flag_colors and API_KEY:
+    if API_KEY:
         print("Fetching REST Countries data...")
 
         flag_colors = assign_flag_colors(
@@ -276,11 +286,15 @@ def create_country_dimension(
             ]
         )
 
-        country_dim["flag_color"] = (
-            country_dim["country_name"].map(flag_colors)
-        )
+        combined_colors = {
+            **flag_colors,
+            **AGGREGATE_COLORS,
+        }
 
-    elif include_flag_colors:
+        country_dim["flag_color"] = country_dim["country_name"].map(
+            combined_colors
+        )
+    else:
         print("Skipping flag colors: REST_COUNTRIES_API_KEY is not configured.")
 
     country_dim["_sort_group"] = country_dim["is_country"].map({True: 0, False: 1})
@@ -674,41 +688,43 @@ def parse_age_group(age_code: str) -> dict:
 
 
 def build_dim_aggregate() -> pd.DataFrame:
+    """
+    Build the dimension rows representing European income benchmarks.
+
+    Creates entries for the 10th, 25th, 50th, 75th, and 90th
+    percentiles, as well as the mean. Each entry includes a
+    country code, descriptive name, and a purple flag color whose
+    intensity increases with the percentile level.
+    """
     return pd.DataFrame([
         {
             "country_code": "P10",
-            "country_name": "International P10",
-            "is_country": False,
-            "flag_color": "#4E79A7",
+            "country_name": "Europe 10th Percentile",
+            "flag_color": "#C9B8E8",
         },
         {
             "country_code": "P25",
-            "country_name": "International P25",
-            "is_country": False,
-            "flag_color": "#59A14F",
+            "country_name": "Europe 25th Percentile",
+            "flag_color": "#B49ADD",
         },
         {
             "country_code": "P50",
-            "country_name": "International Median (P50)",
-            "is_country": False,
-            "flag_color": "#E15759",
+            "country_name": "Europe Median",
+            "flag_color": "#9673CC",
         },
         {
             "country_code": "P75",
-            "country_name": "International P75",
-            "is_country": False,
-            "flag_color": "#F28E2B",
+            "country_name": "Europe 75th Percentile",
+            "flag_color": "#7549B5",
         },
         {
             "country_code": "P90",
-            "country_name": "International P90",
-            "is_country": False,
-            "flag_color": "#B07AA1",
+            "country_name": "Europe 90th Percentile",
+            "flag_color": "#54258F",
         },
         {
             "country_code": "MEAN",
-            "country_name": "International Mean",
-            "is_country": False,
-            "flag_color": "#76B7B2",
+            "country_name": "Europe Average",
+            "flag_color": "#8860B8",
         },
     ])
