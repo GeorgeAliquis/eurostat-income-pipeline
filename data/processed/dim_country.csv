@@ -46,9 +46,9 @@ country_id,country_code,country_name,is_country,flag_color
 45,EU27_2007,European Union (2007–2013),False,#6486BC
 46,EU28,European Union (2013–2020),False,#6486BC
 47,EU27_2020,European Union (from 2020),False,#6486BC
-48,P10,Europe 10th Percentile,False,#C9B8E8
-49,P25,Europe 25th Percentile,False,#B49ADD
-50,P50,Europe Median,False,#9673CC
-51,P75,Europe 75th Percentile,False,#7549B5
+48,P10,Europe 10th Percentile,False,#BDAECD
+49,P25,Europe 25th Percentile,False,#AD96C4
+50,P50,Europe Median,False,#987DB8
+51,P75,Europe 75th Percentile,False,#805BA8
 52,P90,Europe 90th Percentile,False,#54258F
-53,MEAN,Europe Average,False,#8860B8
+53,MEAN,Europe Average,False,#8F6DB1
