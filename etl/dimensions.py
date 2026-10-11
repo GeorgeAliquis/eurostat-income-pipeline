@@ -85,7 +85,6 @@ AGE_TYPE_ORDER = {
     "RANGE": 1,
     "OPEN_ENDED": 2,
     "UPPER_BOUNDED": 3,
-    "OTHER": 99,
 }
 
 load_dotenv(dotenv_path=ENV_FILE)
@@ -277,10 +276,10 @@ def create_country_dimension(df: pd.DataFrame) -> pd.DataFrame:
         country_dim["country_code"].apply(enrich)
     )
 
-    country_dim["flag_color"] = None
-
     if API_KEY:
         print("Fetching REST Countries data...")
+
+        country_dim["flag_color"] = None
 
         flag_colors = assign_flag_colors(
             country_dim.loc[
@@ -479,7 +478,7 @@ def choose_flag_color(
             reverse=True,
     )
 
-    # OLD LOGIC FOR COLOR SELECTION (KEEPING COMMENTED JUST IN CASE)
+    # OLD LOGIC FOR COLOR SELECTION (KEEPING IT COMMENTED JUST IN CASE)
 
     # swatches = {
     #     key: value
@@ -682,12 +681,7 @@ def parse_age_group(age_code: str) -> dict:
             "age_label": f"Under {match.group(1)}"
         }
 
-    return {
-        "min_age": None,
-        "max_age": None,
-        "age_type": "OTHER",
-        "age_label": "Other"
-    }
+    raise ValueError(f"Failed to parse age code: {age_code}")
 
 
 def build_dim_aggregate() -> pd.DataFrame:
@@ -698,36 +692,28 @@ def build_dim_aggregate() -> pd.DataFrame:
     percentiles, as well as the mean. Each entry includes a
     country code, descriptive name, and a purple flag color whose
     intensity increases with the percentile level.
+
+    Flag color is applied only if REST countries API key
+    is configured in a .env file.
     """
-    return pd.DataFrame([
-        {
-            "country_code": "P10",
-            "country_name": "Europe 10th Percentile",
-            "flag_color": "#BDAECD",
-        },
-        {
-            "country_code": "P25",
-            "country_name": "Europe 25th Percentile",
-            "flag_color": "#AD96C4",
-        },
-        {
-            "country_code": "P50",
-            "country_name": "Europe Median",
-            "flag_color": "#987DB8",
-        },
-        {
-            "country_code": "P75",
-            "country_name": "Europe 75th Percentile",
-            "flag_color": "#805BA8",
-        },
-        {
-            "country_code": "P90",
-            "country_name": "Europe 90th Percentile",
-            "flag_color": "#54258F",
-        },
-        {
-            "country_code": "MEAN",
-            "country_name": "Europe Average",
-            "flag_color": "#8F6DB1",
-        },
-    ])
+    benchmarks = [
+        ("P10", "Europe 10th Percentile", "#BDAECD"),
+        ("P25", "Europe 25th Percentile", "#AD96C4"),
+        ("P50", "Europe Median", "#987DB8"),
+        ("P75", "Europe 75th Percentile", "#805BA8"),
+        ("P90", "Europe 90th Percentile", "#54258F"),
+        ("MEAN", "Europe Average", "#8F6DB1"),
+    ]
+
+    columns = ["country_code", "country_name"]
+
+    if API_KEY:
+        columns.append("flag_color")
+
+    return pd.DataFrame(
+        [
+            (code, name, color) if API_KEY else (code, name)
+            for code, name, color in benchmarks
+        ],
+        columns=columns,
+    )
