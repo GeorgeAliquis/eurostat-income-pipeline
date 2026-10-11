@@ -93,6 +93,8 @@ API_KEY = os.getenv("REST_COUNTRIES_API_KEY")
 
 COLOR_SIMILARITY_THRESHOLD = 75
 
+PREDOMINANT_FLAG_COLOR_THRESHOLD = 0.4
+
 SWATCH_PRIORITY = {
     "dark_vibrant": 0,
     "dark_muted": 1,
@@ -189,7 +191,7 @@ def create_unit_dimension(df: pd.DataFrame) -> pd.DataFrame:
     unit_dim["unit_label"] = unit_dim["unit"].map({
         "EUR": "Euro",
         "NAC": "National Currency",
-        "PPS": "Purchasing Power Standard",
+        "PPS": "Purchasing Power",
     })
 
     unit_dim["_sort_order"] = unit_dim["unit"].map(UNIT_ORDER)
@@ -470,69 +472,67 @@ def choose_flag_color(
     if colors is None:
         return None
 
-    dominant = colors["dominant"]
-    prominent = colors["prominent"]
-
-    palette = [
-        color["hex"]
-        for color in sorted(
+    palette = sorted(
             colors["palette"],
             key=lambda x: x["proportion"],
             reverse=True,
-    )]
+    )
 
-    swatches = {
-        key: value
-        for key, value in sorted(
-            (
-                (key, value)
-                for key, value in colors["swatches"].items()
-                if value is not None
-            ),
-            key=lambda item: SWATCH_PRIORITY[item[0]],
-        )
-    }
-
-    candidates = [
-        dominant,
-        prominent,
-        *palette,
-        *swatches.values(),
-    ]
+    # swatches = {
+    #     key: value
+    #     for key, value in sorted(
+    #         (
+    #             (key, value)
+    #             for key, value in colors["swatches"].items()
+    #             if value is not None
+    #         ),
+    #         key=lambda item: SWATCH_PRIORITY[item[0]],
+    #     )
+    # }
 
     # First pass: strict similarity threshold
-    for candidate in candidates:
-        if is_visually_too_light(candidate):
+    for candidate in palette:
+        color = candidate["hex"]
+        proportion = candidate["proportion"]
+
+        if is_visually_too_light(color):
             continue
 
+        if proportion >= PREDOMINANT_FLAG_COLOR_THRESHOLD:
+            return color
+
         if any(
-                colors_are_too_similar(candidate, used_color)
+                colors_are_too_similar(color, used_color)
                 for used_color in used_colors
         ):
             continue
 
-        return candidate
+        return color
 
     # Second pass: relaxed similarity threshold
-    for candidate in candidates:
-        if is_visually_too_light(candidate):
+    for candidate in palette:
+        color = candidate["hex"]
+
+        if is_visually_too_light(color):
             continue
 
         if any(
-                colors_are_too_similar(candidate, used_color, threshold=40)
+                colors_are_too_similar(color, used_color, threshold=40)
                 for used_color in used_colors
         ):
             continue
 
-        return candidate
+        return color
 
     # If no sufficiently distinct color is available,
     # fall back to the first color that is not visually too light.
-    for candidate in [*palette, *swatches.values()]:
-        if not is_visually_too_light(candidate):
-            return candidate
+    for candidate in palette:
+        color = candidate["hex"]
 
-    return dominant or prominent
+        if not is_visually_too_light(color):
+            return color
+
+    return None
 
 
 def colors_are_too_similar(
