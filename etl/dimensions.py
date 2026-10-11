@@ -700,22 +700,22 @@ def build_dim_aggregate() -> pd.DataFrame:
         {
             "country_code": "P10",
             "country_name": "Europe 10th Percentile",
-            "flag_color": "#C9B8E8",
+            "flag_color": "#BDAECD",
         },
         {
             "country_code": "P25",
             "country_name": "Europe 25th Percentile",
-            "flag_color": "#B49ADD",
+            "flag_color": "#AD96C4",
         },
         {
             "country_code": "P50",
             "country_name": "Europe Median",
-            "flag_color": "#9673CC",
+            "flag_color": "#987DB8",
         },
         {
             "country_code": "P75",
             "country_name": "Europe 75th Percentile",
-            "flag_color": "#7549B5",
+            "flag_color": "#805BA8",
         },
         {
             "country_code": "P90",
@@ -725,6 +725,6 @@ def build_dim_aggregate() -> pd.DataFrame:
         {
             "country_code": "MEAN",
             "country_name": "Europe Average",
-            "flag_color": "#8860B8",
+            "flag_color": "#8F6DB1",
         },
     ])
