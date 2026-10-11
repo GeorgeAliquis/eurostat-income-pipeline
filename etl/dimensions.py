@@ -21,6 +21,7 @@ COUNTRY_SPECIAL_CODES = {"EL", "UK", "XK"}
 SPECIAL_CODES = {
     "EL": "Greece",  # Eurostat uses EL instead of GR
     "UK": "United Kingdom",  # legacy Eurostat code
+    "TR": "Turkey",  # Renaming "Türkiye"
     "XK": "Kosovo",
 
     "EA": "Euro area",
@@ -477,6 +478,8 @@ def choose_flag_color(
             key=lambda x: x["proportion"],
             reverse=True,
     )
+
+    # OLD LOGIC FOR COLOR SELECTION (KEEPING COMMENTED JUST IN CASE)
 
     # swatches = {
     #     key: value

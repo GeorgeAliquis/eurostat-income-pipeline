@@ -34,7 +34,7 @@ country_id,country_code,country_name,is_country,flag_color
 33,ES,Spain,True,#ae2015
 34,SE,Sweden,True,#054d93
 35,CH,Switzerland,True,#ff1419
-36,TR,Türkiye,True,#e31316
+36,TR,Turkey,True,#e31316
 37,UK,United Kingdom,True,#0c226c
 38,EA,Euro area,False,#167D8D
 39,EA18,Euro area (2014),False,#4697A3
