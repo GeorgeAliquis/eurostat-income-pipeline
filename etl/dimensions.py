@@ -92,8 +92,9 @@ load_dotenv(dotenv_path=ENV_FILE)
 API_KEY = os.getenv("REST_COUNTRIES_API_KEY")
 
 COLOR_SIMILARITY_THRESHOLD = 75
-
 PREDOMINANT_FLAG_COLOR_THRESHOLD = 0.4
+
+RETRYABLE_STATUS_CODES = {429, 500, 502, 503, 504}
 
 SWATCH_PRIORITY = {
     "dark_vibrant": 0,
@@ -415,7 +416,7 @@ def fetch_country_data(
             timeout=20,
         )
 
-        if response.status_code in {429, 500, 502, 503, 504}:
+        if response.status_code in RETRYABLE_STATUS_CODES:
             if attempt == max_retries:
                 response.raise_for_status()
 

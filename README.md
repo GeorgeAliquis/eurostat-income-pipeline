@@ -24,7 +24,7 @@ The data is cleaned, transformed and modeled in a **dimensional star schema**, p
 
 ## Dashboard Preview
 
-![Eurostat Income Dashboard](assets/dashboard_screenshot_v3.png)
+![Eurostat Income Dashboard](assets/dashboard_v4_screenshot.png)
 
 *Interactive dashboard developed in Power BI for exploring European income distribution by country, year, age group, sex, unit, and statistic type.*
 
