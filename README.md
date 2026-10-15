@@ -112,10 +112,10 @@ The dashboard provides interactive filters that allow users to tailor their anal
 
 | Filter | Available selections | Description |
 |---|---|---|
-| **Country** | European countries, Euro area and European Union aggregates, European income percentiles (10th, 25th, 50th, 75th, and 90th), and the European average. | Select one or multiple countries or European aggregates to compare income trends in the line chart. |
+| **Country** | European countries, Euro area and European Union aggregates, European income percentiles (10th, 25th, 50th, 75th, and 90th) | Select one or multiple countries or European aggregates to compare income trends in the line chart. |
 | **Sex** | All, Male, Female | Filter income statistics by sex. |
-| **Age** | All ages; age ranges (e.g., 16–24, 25–49, 50–64); open-ended groups (e.g., 16+, 65+); and under-age categories (e.g., under 16, under 65). | Select the population age group used to calculate the income statistics. |
-| **Unit** | Euro (EUR), Purchasing Power (PPS), National Currency (NAC) | Choose the unit in which income values are expressed. **PPS** supports comparisons that account for differences in purchasing power between countries. |
+| **Age** | All ages; age ranges (e.g., 25–49, 50–64); open-ended groups (e.g., 16+, 65+); and under-age categories (e.g., under 16, under 65). | Select the population age group used to calculate the income statistics. |
+| **Unit** | Euro (EUR), Purchasing Power (PPS), National Currency (NAC) | Choose the unit in which income values are expressed. |
 | **Statistic** | Mean, Median | Choose the statistical measure used to represent income. The **mean** represents the arithmetic average, while the **median** represents the middle value of the income distribution. |
 | **Year** | Available years from 1995 to 2025, subject to data availability. | Select the year displayed on the choropleth map. **This filter only affects the map.** |
 
