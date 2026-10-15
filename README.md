@@ -65,7 +65,7 @@ The dashboard combines an interactive line chart and a country-level choropleth 
 
 ### Dashboard Visualizations
 
-#### 1. Income Trends Across Europe
+#### 📈 1. Income Trends Across Europe
 
 A multi-series line chart showing how income levels change over time for selected countries and European aggregates.
 
@@ -93,7 +93,7 @@ When the `REST_COUNTRIES_API_KEY` environment variable is configured, flag color
 
 This approach provides recognizable country colors while improving readability and consistency when comparing multiple income trends.
 
-#### 2. Income by Country
+#### 🗺️ 2. Income by Country
 
 An interactive European choropleth map displaying income values by country for the selected year.
 
@@ -106,7 +106,6 @@ An interactive European choropleth map displaying income values by country for t
 **Map implementation:**
 
 The map is built using the **Shape Map visual in Power BI**, with country boundaries defined by a custom GeoJSON file. The geographic file is located at:
-
 [`dashboard/map_utils/europe.geo.json`](dashboard/map_utils/europe.geo.json)
 
 ### Interactive Filters and Settings
