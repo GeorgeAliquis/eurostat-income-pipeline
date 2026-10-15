@@ -70,27 +70,21 @@ def load_star_schema(
 
     engine = get_engine()
 
-    print("Resetting database objects...")
     reset_database(engine)
-
-    print("Loading dimensions...")
 
     for name, df in dims.items():
         df.to_sql(
-            f"dim_{name}",
-            engine,
+            name=f"dim_{name}",
+            con=engine,
             if_exists="fail",
             index=False,
         )
 
-    print("Loading fact table...")
-
     fact.to_sql(
-        "fact_income",
-        engine,
+        name="fact_income",
+        con=engine,
         if_exists="fail",
         index=False,
     )
 
-    print("Creating analytical view...")
     create_analysis_view(engine)

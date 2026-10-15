@@ -57,35 +57,57 @@ For this project, the `ilc_di03` dataset is extracted from Eurostat, transformed
 
 ---
 
-## Dashboard
+## Dashboard Overview
 
-The Power BI dashboard enables users to explore income distribution across Europe through interactive visualizations.
+An interactive Power BI dashboard for exploring income trends and comparing income levels across European countries from **1995 to 2025**, using transformed data from **Eurostat**.
 
-### Features
-
-- Multi-country income trend comparison
-- Income evolution over time (1995–2025)
-- Interactive European choropleth map
-- Filtering by:
-  - Age group
-  - Sex
-  - Unit
-  - Statistic type (Mean / Median)
-  - Countries (for trend comparisons)
-  - Year (for the choropleth map)
+The dashboard combines an interactive line chart and a country-level choropleth map to help users explore how income levels vary across Europe and evolve over time. Users can customize the analysis by selecting countries, demographic groups, measurement units, statistical measures, and years.
 
 ### Dashboard Visualizations
 
-- **Line Chart**
-  - Compare one or multiple countries over time
-  - Displays income trajectories
+#### 1. Income Trends Across Europe
 
-- **Europe Filled Map**
-  - Choropleth map showing income distribution by country
-  - Color intensity represents income values
-  - Updates dynamically for the selected year
+A multi-series line chart showing how income levels change over time for selected countries and European aggregates.
 
----
+**Key capabilities:**
+- Compare one or multiple countries over time.
+- Track historical income trajectories from 1995 to 2025.
+- Compare country-level results with European aggregates, including the 10th, 25th, 50th, 75th, and 90th income percentiles and the arithmetic mean.
+- Explore how income trends differ across countries and demographic groups.
+- View income values according to the selected statistical measure and measurement unit.
+
+The chart updates dynamically according to the selected countries, sex, age group, unit, and statistic.
+
+#### 2. Income by Country
+
+An interactive European choropleth map displaying income values by country for the selected year.
+
+**Key capabilities:**
+- Explore the geographical distribution of income across European countries.
+- Compare country-level income values using a graduated color scale.
+- Select a year to examine changes in geographical income patterns over time.
+- Interpret the map using a continuous legend indicating the minimum and maximum income values in the current selection.
+
+**Map implementation:**
+
+The map is built using the **Shape Map visual in Power BI**, with country boundaries defined by a custom GeoJSON file. The geographic file is located at:
+
+[`dashboard/map_utils/europe.geo.json`](dashboard/map_utils/europe.geo.json)
+
+This file provides the geographic shapes used to render European countries on the map. The Shape Map visual matches the geographic features to the corresponding country data, enabling country-level income values to be displayed using a choropleth color scale.
+
+### Interactive Filters and Settings
+
+| Filter | Available selections | Description |
+|---|---|---|
+| **Country** | Albania, Austria, Belgium, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Italy, Kosovo, Latvia, Lithuania, Luxembourg, Malta, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, United Kingdom; Euro area and European Union aggregates; European income percentiles (10th, 25th, 50th, 75th, 90th) and the European average. | Select one or multiple countries and European aggregates to compare income trends in the line chart. |
+| **Sex** | All, Male, Female | Filter income statistics by sex. **All** includes the combined population where available. |
+| **Age** | All ages; Under 6, 6–10, 6–11, 11–15, 12–17, Under 16, Under 18, 16–24, 16–64, 18–24, 18–64, 25–49, 25–54, 50–64, 55–64, 60+, Under 60, 65–74, 65+, Under 65, 75+, and other available age categories defined in the dataset. | Select the population age group used to calculate the income statistics. |
+| **Unit** | Euro (EUR), Purchasing Power (PPS), National Currency (NAC) | Choose the unit in which income values are expressed. PPS supports comparisons that account for differences in purchasing power between countries. |
+| **Statistic** | Mean, Median | Choose the statistical measure used to represent income. The mean represents the arithmetic average, while the median represents the middle value of the income distribution. |
+| **Year** | Available years from 1995 to 2025, subject to data availability. | Select the year displayed on the choropleth map to compare income values geographically across countries. |
+
+The available results depend on the selected filters and the coverage of the underlying dataset. Some combinations of countries, demographic groups, units, statistics, and years may not have data available.
 
 ## Project Workflow
 
