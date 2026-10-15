@@ -116,7 +116,7 @@ The dashboard provides interactive filters that allow users to tailor their anal
 | **Sex** | All, Male, Female | Filter income statistics by sex. |
 | **Age** | All ages; age ranges (e.g., 25–49, 50–64); open-ended groups (e.g., 16+, 65+); and under-age categories (e.g., under 16, under 65). | Select the population age group used to calculate the income statistics. |
 | **Unit** | Euro (EUR), Purchasing Power (PPS), National Currency (NAC) | Choose the unit in which income values are expressed. |
-| **Statistic** | Mean, Median | Choose the statistical measure used to represent income. The **mean** represents the arithmetic average, while the **median** represents the middle value of the income distribution. |
+| **Statistic** | Mean, Median | Choose the statistical measure used to represent income. **Μean** represents the arithmetic average, while **Μedian** represents the middle value of the income distribution. |
 | **Year** | Available years from 1995 to 2025, subject to data availability. | Select the year displayed on the choropleth map. **This filter only affects the map.** |
 
 ---
