@@ -15,7 +15,7 @@ The data is cleaned, transformed and modeled in a **dimensional star schema**, p
 - [Dataset](#dataset)
 - [Dashboard](#dashboard)
   - [Income Trends Across Europe](#-1-income-trends-across-europe)
-  - [Income by Country](#-2-income-by-country)
+  - [Income by Country](#income-by-country)
   - [Interactive Filters and Settings](#interactive-filters-and-settings)
 - [Project Workflow](#project-workflow)
 - [Data Warehouse Schema](#data-warehouse-schema)
