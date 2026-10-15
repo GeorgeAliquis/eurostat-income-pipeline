@@ -119,8 +119,6 @@ The dashboard provides interactive filters that allow users to tailor their anal
 | **Statistic** | Mean, Median | Choose the statistical measure used to represent income. The **mean** represents the arithmetic average, while the **median** represents the middle value of the income distribution. |
 | **Year** | Available years from 1995 to 2025, subject to data availability. | Select the year displayed on the choropleth map. **This filter only affects the map.** |
 
-The available results depend on the selected filters and the coverage of the underlying dataset. Some combinations of **countries, demographic groups, units, statistics, and years** may not have data available.
-
 ---
 
 ## Project Workflow
@@ -182,6 +180,7 @@ dim_unit
 ├── assets/                     # Screenshots
 │
 ├── dashboard/
+│   ├── map_utils/
 │   └── Eurostat_Income_Distribution_Dashboard.pbix
 │
 ├── data/
