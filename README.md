@@ -111,7 +111,8 @@ An interactive European choropleth map displaying income values by country for t
 The map is built using the **Shape Map visual in Power BI**, with country boundaries defined by a custom GeoJSON file. The geographic file is located at:
 [`dashboard/map_utils/europe.geo.json`](dashboard/map_utils/europe.geo.json)
 
-### Interactive Filters and Settings
+<a id="interactive-filters-and-settings"></a>
+### Interactive Filters and Settings ⚙️
 
 | Filter | Available selections | Description |
 |---|---|---|
