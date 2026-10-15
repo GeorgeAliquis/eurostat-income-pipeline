@@ -14,7 +14,7 @@ The data is cleaned, transformed and modeled in a **dimensional star schema**, p
 - [Analytical Questions](#analytical-questions)
 - [Dataset](#dataset)
 - [Dashboard](#dashboard)
-  - [Income Trends Across Europe](#-1-income-trends-across-europe)
+  - [Income Trends Across Europe](#income-trends-across-europe)
   - [Income by Country](#income-by-country)
   - [Interactive Filters and Settings](#interactive-filters-and-settings)
 - [Project Workflow](#project-workflow)
@@ -66,7 +66,8 @@ An interactive Power BI dashboard for exploring income trends and comparing inco
 
 The dashboard combines an interactive line chart and a country-level choropleth map to help users explore how income levels vary across Europe and evolve over time. Users can customize the analysis by selecting countries, demographic groups, measurement units, statistical measures, and years.
 
-### 📈 1. Income Trends Across Europe
+<a id="income-trends-across-europe"></a>
+### 1. Income Trends Across Europe 📈
 
 A multi-series line chart showing how income levels change over time for selected countries and European aggregates.
 
@@ -94,7 +95,8 @@ When the `REST_COUNTRIES_API_KEY` environment variable is configured, flag color
 
 This approach provides recognizable country colors while improving readability and consistency when comparing multiple income trends.
 
-### 🗺️ 2. Income by Country
+<a id="income-by-country"></a>
+### 2. Income by Country 🗺️
 
 An interactive European choropleth map displaying income values by country for the selected year.
 
