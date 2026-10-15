@@ -57,7 +57,7 @@ For this project, the `ilc_di03` dataset is extracted from Eurostat, transformed
 
 ---
 
-## Dashboard Overview
+## Dashboard
 
 An interactive Power BI dashboard for exploring income trends and comparing income levels across European countries from **1995 to 2025**, using transformed data from **Eurostat**.
 
@@ -94,18 +94,16 @@ The map is built using the **Shape Map visual in Power BI**, with country bounda
 
 [`dashboard/map_utils/europe.geo.json`](dashboard/map_utils/europe.geo.json)
 
-This file provides the geographic shapes used to render European countries on the map. The Shape Map visual matches the geographic features to the corresponding country data, enabling country-level income values to be displayed using a choropleth color scale.
-
 ### Interactive Filters and Settings
 
 | Filter | Available selections | Description |
 |---|---|---|
 | **Country** | Albania, Austria, Belgium, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Italy, Kosovo, Latvia, Lithuania, Luxembourg, Malta, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, United Kingdom; Euro area and European Union aggregates; European income percentiles (10th, 25th, 50th, 75th, 90th) and the European average. | Select one or multiple countries and European aggregates to compare income trends in the line chart. |
 | **Sex** | All, Male, Female | Filter income statistics by sex. **All** includes the combined population where available. |
-| **Age** | All ages; Under 6, 6–10, 6–11, 11–15, 12–17, Under 16, Under 18, 16–24, 16–64, 18–24, 18–64, 25–49, 25–54, 50–64, 55–64, 60+, Under 60, 65–74, 65+, Under 65, 75+, and other available age categories defined in the dataset. | Select the population age group used to calculate the income statistics. |
-| **Unit** | Euro (EUR), Purchasing Power (PPS), National Currency (NAC) | Choose the unit in which income values are expressed. PPS supports comparisons that account for differences in purchasing power between countries. |
+| **Age** | **TOTAL:** All ages. **RANGE:** 6–11, 6–10, 11–15, 12–17, 16–24, 16–64, 18–24, 18–64, 25–49, 25–54, 50–64, 55–64, 65–74. **OPEN_ENDED:** 16+, 18+, 60+, 65+, 75+. **UPPER_BOUNDED:** Under 6, Under 16, Under 18, Under 60, Under 65, Under 75. | Select the population age group used to calculate the income statistics. |
+| **Unit** | Euro (EUR), Purchasing Power Standard (PPS), National Currency (NAC) | Choose the unit in which income values are expressed. PPS supports comparisons that account for differences in purchasing power between countries. |
 | **Statistic** | Mean, Median | Choose the statistical measure used to represent income. The mean represents the arithmetic average, while the median represents the middle value of the income distribution. |
-| **Year** | Available years from 1995 to 2025, subject to data availability. | Select the year displayed on the choropleth map to compare income values geographically across countries. |
+| **Year** | Available years from 1995 to 2025, subject to data availability. | Select the year displayed on the choropleth map (**this filter only affects the map**). |
 
 The available results depend on the selected filters and the coverage of the underlying dataset. Some combinations of countries, demographic groups, units, statistics, and years may not have data available.
 
