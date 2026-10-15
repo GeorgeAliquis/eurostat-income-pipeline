@@ -78,6 +78,21 @@ A multi-series line chart showing how income levels change over time for selecte
 
 The chart updates dynamically according to the selected countries, sex, age group, unit, and statistic.
 
+**Line Chart Implementation:**
+
+Each country's line is assigned a representative color derived from its national flag. Country information, including flag color data, is retrieved from the [REST Countries API](https://restcountries.com/) and cached locally to avoid repeated API requests.
+
+The color-selection process follows these rules:
+- **Flag-based color extraction:** Candidate colors are obtained from the flag's color palette and evaluated in descending order of their relative proportions.
+- **Contrast and readability:** Colors that are too light against a white background are rejected to ensure sufficient visual contrast.
+- **Color differentiation:** Candidate colors are compared with colors already assigned to other countries to reduce visual similarity between chart series.
+- **Fallback selection:** If no sufficiently distinct color is available, the first candidate that meets the contrast requirement is used.
+- **European aggregates:** Euro area and European Union aggregates use predefined teal and blue colors, respectively, while European income percentiles and the mean use a predefined purple palette. These colors distinguish aggregate series from individual countries.
+
+When the `REST_COUNTRIES_API_KEY` environment variable is configured, flag color data is retrieved from the API when needed and stored in a local cache for subsequent use. If the API key is not configured, automatic flag color assignment is skipped.
+
+This approach provides recognizable country colors while improving readability and consistency when comparing multiple income trends.
+
 #### 2. Income by Country
 
 An interactive European choropleth map displaying income values by country for the selected year.
@@ -101,11 +116,13 @@ The map is built using the **Shape Map visual in Power BI**, with country bounda
 | **Country** | Albania, Austria, Belgium, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Italy, Kosovo, Latvia, Lithuania, Luxembourg, Malta, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, United Kingdom; Euro area and European Union aggregates; European income percentiles (10th, 25th, 50th, 75th, 90th) and the European average. | Select one or multiple countries and European aggregates to compare income trends in the line chart. |
 | **Sex** | All, Male, Female | Filter income statistics by sex. **All** includes the combined population where available. |
 | **Age** | **Total:** All ages. **Ranges:** 6–11, 6–10, 11–15, 12–17, 16–24, 16–64, 18–24, 18–64, 25–49, 25–54, 50–64, 55–64, 65–74. **Open Ended:** 16+, 18+, 60+, 65+, 75+. **Upper Bounded:** Under 6, Under 16, Under 18, Under 60, Under 65, Under 75. | Select the population age group used to calculate the income statistics. |
-| **Unit** | Euro (EUR), Purchasing Power Standard (PPS), National Currency (NAC) | Choose the unit in which income values are expressed. PPS supports comparisons that account for differences in purchasing power between countries. |
+| **Unit** | Euro (EUR), Purchasing Power (PPS), National Currency (NAC) | Choose the unit in which income values are expressed. PPS supports comparisons that account for differences in purchasing power between countries. |
 | **Statistic** | Mean, Median | Choose the statistical measure used to represent income. The mean represents the arithmetic average, while the median represents the middle value of the income distribution. |
 | **Year** | Available years from 1995 to 2025, subject to data availability. | Select the year displayed on the choropleth map (**this filter only affects the map**). |
 
 The available results depend on the selected filters and the coverage of the underlying dataset. Some combinations of countries, demographic groups, units, statistics, and years may not have data available.
+
+---
 
 ## Project Workflow
 
