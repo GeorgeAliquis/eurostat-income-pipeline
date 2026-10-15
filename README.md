@@ -62,11 +62,13 @@ For this project, the `ilc_di03` dataset is extracted from Eurostat, transformed
 
 ---
 
-## Dashboard
+## Dashboard Overview
 
 An interactive **Power BI dashboard** for exploring income trends and comparing income levels across European countries from **1995 to 2025**, using transformed data from **Eurostat**.
 
 The dashboard combines an interactive **line chart** and a country-level **choropleth map** to explore how income levels vary across Europe and evolve over time. Users can customize their analysis through filters for **countries, demographic groups, measurement units, statistical measures, and years**.
+
+The star schema is extracted from a PostgreSQL database, allowing automatic refreshing each time the underlying tables are updated.
 
 <a id="income-trends-across-europe"></a>
 ### 1. Income Trends Across Europe 📈
@@ -74,32 +76,20 @@ The dashboard combines an interactive **line chart** and a country-level **choro
 A multi-series line chart illustrating how **income levels change over time** across selected countries and European aggregates.
 
 **Key capabilities:**
-- **Compare countries:** Analyze one or multiple countries simultaneously.
-- **Explore historical trends:** Track income trajectories from **1995 to 2025**.
-- **Compare European aggregates:** Examine country-level results alongside the **Euro area, European Union, European income percentiles (10th, 25th, 50th, 75th, and 90th), and the European average**.
-- **Analyze demographic differences:** Explore how income trends vary by **age group and sex**.
-- **Customize income measures:** Switch between the selected **statistical measure and measurement unit**.
+- **Country comparison:** Analyze multiple countries and track trends from **1995–2025**.
+- **European benchmarks:** Compare results with the **Euro area, EU, 10th/25th/50th/75th/90th percentiles, and European average**.
 
-The chart updates dynamically according to the selected **countries, sex, age group, unit, and statistic**, allowing users to explore different combinations of income data interactively.
+The chart updates dynamically based on the selected filters.
 
 **Line Chart Implementation:**
 
-Each country's line is assigned a **representative color derived from its national flag**. Country information, including flag color data, is retrieved from the [REST Countries API](https://restcountries.com/) and cached locally to avoid repeated API requests.
-
-The color-selection process follows these rules:
-
-- **Flag-based color extraction:** Candidate colors are obtained from the flag's color palette and evaluated in descending order of their relative proportions.
-- **Contrast and readability:** Colors that are too light against a white background are rejected to maintain sufficient visual contrast.
-- **Color differentiation:** Candidate colors are compared with colors already assigned to other countries to reduce visual similarity between chart series.
-- **Fallback selection:** If no sufficiently distinct color is available, the first candidate meeting the contrast requirement is used.
-- **European aggregates:** The Euro area and European Union aggregates use predefined **teal and blue**, respectively, while European income percentiles and the mean use a predefined **purple palette**. These colors distinguish aggregate series from individual countries.
-
-When the `REST_COUNTRIES_API_KEY` environment variable is configured, flag color data is retrieved from the API when needed and stored in a **local cache** for subsequent use. If the API key is not configured, **automatic flag color assignment is skipped**.
-
-This approach provides recognizable country colors while improving **readability and consistency** when comparing multiple income trends.
+- **Country colors:** Derived from national flags using the [REST Countries API](https://restcountries.com/), with local caching.
+- **Readability:** Light colors are rejected, and similar colors are avoided where possible.
+- **Aggregate colors:** Euro area and EU use predefined teal and blue; percentiles and the mean use purple shades.
+- **API configuration:** `REST_COUNTRIES_API_KEY` is required for automatic flag-based color assignment.
 
 <a id="income-by-country"></a>
-### 2. Income by Country 🗺️
+### 2. Income by Country - Map 🗺️
 
 An interactive **European choropleth map** displaying income values by country for the selected year.
 
@@ -113,9 +103,7 @@ An interactive **European choropleth map** displaying income values by country f
 
 The map uses the **Shape Map visual in Power BI**, with country boundaries defined by a custom **GeoJSON** file.
 
-The geographic file is located at:
-
-[`dashboard/map_utils/europe.geo.json`](dashboard/map_utils/europe.geo.json)
+The geographic file is located at: [`dashboard/map_utils/europe.geo.json`](dashboard/map_utils/europe.geo.json)
 
 <a id="interactive-filters-and-settings"></a>
 ### Interactive Filters and Settings 🎛️
@@ -125,7 +113,7 @@ The dashboard provides interactive filters that allow users to tailor their anal
 | Filter | Available selections | Description |
 |---|---|---|
 | **Country** | European countries, Euro area and European Union aggregates, European income percentiles (10th, 25th, 50th, 75th, and 90th), and the European average. | Select one or multiple countries or European aggregates to compare income trends in the line chart. |
-| **Sex** | All, Male, Female | Filter income statistics by sex. **All** includes the combined population where available. |
+| **Sex** | All, Male, Female | Filter income statistics by sex. |
 | **Age** | All ages; age ranges (e.g., 16–24, 25–49, 50–64); open-ended groups (e.g., 16+, 65+); and under-age categories (e.g., under 16, under 65). | Select the population age group used to calculate the income statistics. |
 | **Unit** | Euro (EUR), Purchasing Power (PPS), National Currency (NAC) | Choose the unit in which income values are expressed. **PPS** supports comparisons that account for differences in purchasing power between countries. |
 | **Statistic** | Mean, Median | Choose the statistical measure used to represent income. The **mean** represents the arithmetic average, while the **median** represents the middle value of the income distribution. |
