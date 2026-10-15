@@ -64,68 +64,74 @@ For this project, the `ilc_di03` dataset is extracted from Eurostat, transformed
 
 ## Dashboard
 
-An interactive Power BI dashboard for exploring income trends and comparing income levels across European countries from **1995 to 2025**, using transformed data from **Eurostat**.
+An interactive **Power BI dashboard** for exploring income trends and comparing income levels across European countries from **1995 to 2025**, using transformed data from **Eurostat**.
 
-The dashboard combines an interactive line chart and a country-level choropleth map to help users explore how income levels vary across Europe and evolve over time. Users can customize the analysis by selecting countries, demographic groups, measurement units, statistical measures, and years.
+The dashboard combines an interactive **line chart** and a country-level **choropleth map** to explore how income levels vary across Europe and evolve over time. Users can customize their analysis through filters for **countries, demographic groups, measurement units, statistical measures, and years**.
 
 <a id="income-trends-across-europe"></a>
 ### 1. Income Trends Across Europe 📈
 
-A multi-series line chart showing how income levels change over time for selected countries and European aggregates.
+A multi-series line chart illustrating how **income levels change over time** across selected countries and European aggregates.
 
 **Key capabilities:**
-- Compare one or multiple countries over time.
-- Track historical income trajectories from 1995 to 2025.
-- Compare country-level results with European aggregates, including the 10th, 25th, 50th, 75th, and 90th income percentiles and the arithmetic mean.
-- Explore how income trends differ across countries and demographic groups.
-- View income values according to the selected statistical measure and measurement unit.
+- **Compare countries:** Analyze one or multiple countries simultaneously.
+- **Explore historical trends:** Track income trajectories from **1995 to 2025**.
+- **Compare European aggregates:** Examine country-level results alongside the **Euro area, European Union, European income percentiles (10th, 25th, 50th, 75th, and 90th), and the European average**.
+- **Analyze demographic differences:** Explore how income trends vary by **age group and sex**.
+- **Customize income measures:** Switch between the selected **statistical measure and measurement unit**.
 
-The chart updates dynamically according to the selected countries, sex, age group, unit, and statistic.
+The chart updates dynamically according to the selected **countries, sex, age group, unit, and statistic**, allowing users to explore different combinations of income data interactively.
 
 **Line Chart Implementation:**
 
-Each country's line is assigned a representative color derived from its national flag. Country information, including flag color data, is retrieved from the [REST Countries API](https://restcountries.com/) and cached locally to avoid repeated API requests.
+Each country's line is assigned a **representative color derived from its national flag**. Country information, including flag color data, is retrieved from the [REST Countries API](https://restcountries.com/) and cached locally to avoid repeated API requests.
 
 The color-selection process follows these rules:
+
 - **Flag-based color extraction:** Candidate colors are obtained from the flag's color palette and evaluated in descending order of their relative proportions.
-- **Contrast and readability:** Colors that are too light against a white background are rejected to ensure sufficient visual contrast.
+- **Contrast and readability:** Colors that are too light against a white background are rejected to maintain sufficient visual contrast.
 - **Color differentiation:** Candidate colors are compared with colors already assigned to other countries to reduce visual similarity between chart series.
-- **Fallback selection:** If no sufficiently distinct color is available, the first candidate that meets the contrast requirement is used.
-- **European aggregates:** Euro area and European Union aggregates use predefined teal and blue colors, respectively, while European income percentiles and the mean use a predefined purple palette. These colors distinguish aggregate series from individual countries.
+- **Fallback selection:** If no sufficiently distinct color is available, the first candidate meeting the contrast requirement is used.
+- **European aggregates:** The Euro area and European Union aggregates use predefined **teal and blue**, respectively, while European income percentiles and the mean use a predefined **purple palette**. These colors distinguish aggregate series from individual countries.
 
-When the `REST_COUNTRIES_API_KEY` environment variable is configured, flag color data is retrieved from the API when needed and stored in a local cache for subsequent use. If the API key is not configured, automatic flag color assignment is skipped.
+When the `REST_COUNTRIES_API_KEY` environment variable is configured, flag color data is retrieved from the API when needed and stored in a **local cache** for subsequent use. If the API key is not configured, **automatic flag color assignment is skipped**.
 
-This approach provides recognizable country colors while improving readability and consistency when comparing multiple income trends.
+This approach provides recognizable country colors while improving **readability and consistency** when comparing multiple income trends.
 
 <a id="income-by-country"></a>
 ### 2. Income by Country 🗺️
 
-An interactive European choropleth map displaying income values by country for the selected year.
+An interactive **European choropleth map** displaying income values by country for the selected year.
 
 **Key capabilities:**
-- Explore the geographical distribution of income across European countries.
-- Compare country-level income values using a graduated color scale.
-- Select a year to examine changes in geographical income patterns over time.
-- Interpret the map using a continuous legend indicating the minimum and maximum income values in the current selection.
+- **Explore geographical patterns:** Examine the distribution of income across European countries.
+- **Compare countries visually:** Use a graduated color scale to identify differences in country-level income values.
+- **Track changes over time:** Select a year to examine how geographical income patterns evolve.
+- **Interpret the color scale:** Use a continuous legend showing the **minimum and maximum income values** in the current selection.
 
 **Map implementation:**
 
-The map is built using the **Shape Map visual in Power BI**, with country boundaries defined by a custom GeoJSON file. The geographic file is located at:
+The map uses the **Shape Map visual in Power BI**, with country boundaries defined by a custom **GeoJSON** file.
+
+The geographic file is located at:
+
 [`dashboard/map_utils/europe.geo.json`](dashboard/map_utils/europe.geo.json)
 
 <a id="interactive-filters-and-settings"></a>
-### Interactive Filters and Settings ⚙️
+### Interactive Filters and Settings 🎛️
+
+The dashboard provides interactive filters that allow users to tailor their analysis to specific countries, demographic groups, and income measures.
 
 | Filter | Available selections | Description |
 |---|---|---|
-| **Country** | European countries, Euro area and European Union aggregates, European income percentiles (10th, 25th, 50th, 75th, 90th), and the European average. | Select one or multiple countries or European aggregates to compare income trends in the line chart. |
+| **Country** | European countries, Euro area and European Union aggregates, European income percentiles (10th, 25th, 50th, 75th, and 90th), and the European average. | Select one or multiple countries or European aggregates to compare income trends in the line chart. |
 | **Sex** | All, Male, Female | Filter income statistics by sex. **All** includes the combined population where available. |
-| **Age** | All ages; ranges (e.g., 16–24, 25–49, 50–64); open-ended groups (e.g., 16+, 65+); and under-age categories (e.g., under 16, under 65). | Select the population age group used to calculate the income statistics. |
-| **Unit** | Euro (EUR), Purchasing Power (PPS), National Currency (NAC) | Choose the unit in which income values are expressed. PPS supports comparisons that account for differences in purchasing power between countries. |
-| **Statistic** | Mean, Median | Choose the statistical measure used to represent income. The mean represents the arithmetic average, while the median represents the middle value of the income distribution. |
-| **Year** | Available years from 1995 to 2025, subject to data availability. | Select the year displayed on the choropleth map (**this filter only affects the map**). |
+| **Age** | All ages; age ranges (e.g., 16–24, 25–49, 50–64); open-ended groups (e.g., 16+, 65+); and under-age categories (e.g., under 16, under 65). | Select the population age group used to calculate the income statistics. |
+| **Unit** | Euro (EUR), Purchasing Power (PPS), National Currency (NAC) | Choose the unit in which income values are expressed. **PPS** supports comparisons that account for differences in purchasing power between countries. |
+| **Statistic** | Mean, Median | Choose the statistical measure used to represent income. The **mean** represents the arithmetic average, while the **median** represents the middle value of the income distribution. |
+| **Year** | Available years from 1995 to 2025, subject to data availability. | Select the year displayed on the choropleth map. **This filter only affects the map.** |
 
-The available results depend on the selected filters and the coverage of the underlying dataset. Some combinations of countries, demographic groups, units, statistics, and years may not have data available.
+The available results depend on the selected filters and the coverage of the underlying dataset. Some combinations of **countries, demographic groups, units, statistics, and years** may not have data available.
 
 ---
 
