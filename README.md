@@ -67,7 +67,7 @@ The dashboard combines an interactive **line chart** and a country-level **choro
 The star schema is extracted from a PostgreSQL database, allowing automatic refreshing each time the underlying tables are updated.
 
 <a id="income-trends-across-europe"></a>
-### 1. Income Trends Across Europe 📈
+### 1. Income Trends Across Europe — Multi-line Chart 📈
 
 A multi-series line chart illustrating how **income levels change over time** across selected countries and European aggregates.
 
@@ -75,17 +75,14 @@ A multi-series line chart illustrating how **income levels change over time** ac
 - **Country comparison:** Analyze multiple countries and track trends from **1995–2025**.
 - **European benchmarks:** Compare results with the **Euro area, EU, 10th/25th/50th/75th/90th percentiles, and European average**.
 
-The chart updates dynamically based on the selected filters.
-
 **Line Chart Implementation:**
-
 - **Country colors:** Derived from national flags using the [REST Countries API](https://restcountries.com/), with local caching.
 - **Readability:** Light colors are rejected, and similar colors are avoided where possible.
 - **Aggregate colors:** Euro area and EU use predefined teal and blue; percentiles and the mean use purple shades.
 - **API configuration:** `REST_COUNTRIES_API_KEY` is required for automatic flag-based color assignment.
 
 <a id="income-by-country"></a>
-### 2. Income by Country - Map 🗺️
+### 2. Income by Country — Choropleth Map 🗺️
 
 An interactive **European choropleth map** displaying income values by country for the selected year.
 
@@ -97,10 +94,7 @@ An interactive **European choropleth map** displaying income values by country f
 - **View country details:** Hover over a country to see its income value, **currency or unit (EUR, PPS, or NAC)**, selected **sex and age group**, and Eurostat observation **flags** for the selected year: **b** (break in time series), and **e** (estimated)
 
 **Map implementation:**
-
-The map uses the **Shape Map visual in Power BI**, with country boundaries defined by a custom **GeoJSON** file.
-
-The geographic file is located at: [`dashboard/map_utils/europe.geo.json`](dashboard/map_utils/europe.geo.json)
+- The map uses the **Shape Map visual in Power BI**, with country boundaries defined by a custom **GeoJSON** file. The geographic file is located at: [`dashboard/map_utils/europe.geo.json`](dashboard/map_utils/europe.geo.json)
 
 <a id="interactive-filters-and-settings"></a>
 ### Interactive Filters and Settings 🎛️
