@@ -91,7 +91,7 @@ An interactive **European choropleth map** displaying income values by country f
 - **Compare countries visually:** Identify differences using a graduated color scale.
 - **Track changes over time:** Select a year to explore changing income patterns.
 - **Interpret the color scale:** View the minimum and maximum income values for the current selection.
-- **View country details:** Hover over a country to see its income value, **currency or unit (EUR, PPS, or NAC)**, selected **sex and age group**, and Eurostat observation **flags** for the selected year: **b** (break in time series), and **e** (estimated)
+- **View country details:** Hover over a country to see its income value, **currency or unit (EUR, PPS, or NAC)**, selected **sex and age group**, and Eurostat observation **flags** for the selected year: **(b)** break in time series, **(e)** estimated, and **(p)** provisional.
 
 **Map implementation:**
 - The map uses the **Shape Map visual in Power BI**, with country boundaries defined by a custom **GeoJSON** file. The geographic file is located at: [`dashboard/map_utils/europe.geo.json`](dashboard/map_utils/europe.geo.json)
