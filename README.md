@@ -90,10 +90,11 @@ The chart updates dynamically based on the selected filters.
 An interactive **European choropleth map** displaying income values by country for the selected year.
 
 **Key capabilities:**
-- **Explore geographical patterns:** Examine the distribution of income across European countries.
-- **Compare countries visually:** Use a graduated color scale to identify differences in country-level income values.
-- **Track changes over time:** Select a year to examine how geographical income patterns evolve.
-- **Interpret the color scale:** Use a continuous legend showing the **minimum and maximum income values** in the current selection.
+- **Explore geographical patterns:** Examine income distribution across European countries.
+- **Compare countries visually:** Identify differences using a graduated color scale.
+- **Track changes over time:** Select a year to explore changing income patterns.
+- **Interpret the color scale:** View the minimum and maximum income values for the current selection.
+- **View country details:** Hover over a country to see its income value, **currency or unit (EUR, PPS, or NAC)**, selected **sex and age group**, and Eurostat observation **flags** for the selected year: **b** (break in time series), and **e** (estimated)
 
 **Map implementation:**
 
