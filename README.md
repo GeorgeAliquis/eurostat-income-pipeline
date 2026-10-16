@@ -15,7 +15,7 @@ The data is cleaned, transformed and modeled in a **dimensional star schema**, p
 - [Dashboard Preview](#dashboard-preview)
 - [Analytical Questions](#analytical-questions)
 - [Dataset](#dataset)
-- [Dashboard](#dashboard)
+- [Dashboard](#dashboard-overview)
   - [Income Trends Across Europe](#income-trends-across-europe)
   - [Income by Country](#income-by-country)
   - [Interactive Filters and Settings](#interactive-filters-and-settings)
