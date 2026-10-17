@@ -72,7 +72,6 @@ The star schema is extracted from a PostgreSQL database, allowing automatic refr
 
 A multi-series line chart illustrating how **income levels change over time** across selected countries and European aggregates.
 
-
 <table>
   <tr>
     <td width="60%" valign="middle">
@@ -81,18 +80,18 @@ A multi-series line chart illustrating how **income levels change over time** ac
 - **Country comparison:** Analyze multiple countries and track trends from **1995–2025**.
 - **European benchmarks:** Compare results with the **Euro area, EU, 10th/25th/50th/75th/90th percentiles, and European average**.
 
-**Line Chart Implementation:**
-- **Country colors:** Derived from national flags using the [REST Countries API](https://restcountries.com/), with local caching.
-- **Readability:** Light colors are rejected, and similar colors are avoided where possible.
-- **Aggregate colors:** Euro area and EU use predefined teal and blue; percentiles and the mean use purple shades.
-- **API configuration:** `REST_COUNTRIES_API_KEY` is required for automatic flag-based color assignment.
-
     </td>
     <td width="40%" align="center" valign="middle">
       <img src="assets/multi-line_chart.png" alt="Multi-line chart showing income trends across European countries and aggregates" width="100%" />
     </td>
   </tr>
 </table>
+
+**Multi-line chart implementation:**
+- **Country colors:** Derived from national flags using the [REST Countries API](https://restcountries.com/), with local caching.
+- **Readability:** Light colors are rejected, and similar colors are avoided where possible.
+- **Aggregate colors:** Euro area and EU use predefined teal and blue; percentiles and the mean use purple shades.
+- **API configuration:** `REST_COUNTRIES_API_KEY` is required for automatic flag-based color assignment.
 
 <a id="income-by-country"></a>
 ### 2. Income by Country — Choropleth Map 🗺️
@@ -103,15 +102,11 @@ An interactive **European choropleth map** displaying income values by country f
   <tr>
     <td width="60%" valign="middle">
 
-<strong>Key capabilities:</strong>
+**Key capabilities:**
 
-- <strong>Explore geographical patterns:</strong> Examine income distribution across European countries and identify differences using a graduated color scale.
-- <strong>Track changes over time:</strong> Select a year to explore changing income patterns.
-- <strong>View country details:</strong> Hover over a country to see its income value, <strong>currency or unit (EUR, PPS, or NAC)</strong>, selected <strong>sex and age group</strong>, and Eurostat observation <strong>flags</strong> for the selected year: <strong>(b)</strong> break in time series, <strong>(e)</strong> estimated, and <strong>(p)</strong> provisional.
-
-<strong>Map implementation:</strong>
-
-- The map uses the <strong>Shape Map visual in Power BI</strong>, with country boundaries defined by a custom <strong>GeoJSON</strong> file. The geographic file is located at: <a href="dashboard/map_utils/europe.geo.json"><code>dashboard/map_utils/europe.geo.json</code></a>.
+- **Explore geographical patterns:** Examine income distribution across European countries and identify differences using a graduated color scale.
+- **Track changes over time:** Select a year to explore changing income patterns.
+- **View country details:** Hover over a country to see its income value, **currency or unit (EUR, PPS, or NAC)**, selected **sex and age group**, and Eurostat observation **flags** for the selected year: **(b)** break in time series, **(e)** estimated, and **(p)** provisional.
 
     </td>
     <td width="40%" align="center" valign="middle">
@@ -120,12 +115,15 @@ An interactive **European choropleth map** displaying income values by country f
   </tr>
 </table>
 
+**Map implementation:**
+- The map uses the **Shape Map visual in Power BI**, with country boundaries defined by a custom **GeoJSON** file.
+- **Geographic file:** [`dashboard/map_utils/europe.geo.json`](dashboard/map_utils/europe.geo.json).
+
+
 <a id="interactive-filters-and-settings"></a>
 ### Interactive Filters and Settings 🎚️
 
-<p align="center">
-  The dashboard provides interactive filters that allow users to tailor their analysis to specific countries, demographic groups, and income measures.
-</p>
+The dashboard provides interactive filters that allow users to tailor their analysis to specific countries, demographic groups, and income measures.
 
 <p align="center">
   <img src="assets/slicers.png" alt="Interactive dashboard filters for countries, demographic groups, and income measures" width="75%" />
