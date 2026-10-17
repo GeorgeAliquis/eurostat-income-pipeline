@@ -84,14 +84,14 @@ A multi-series line chart illustrating how **income levels change over time** ac
   </thead>
   <tbody>
     <tr>
-      <td><strong>Country comparisons</strong></td>
+      <td><strong>Country Comparisons</strong></td>
       <td>Analyze multiple countries and track trends from <strong>1995–2025</strong>.</td>
       <td rowspan="2" align="center" valign="middle">
         <img src="assets/multi-line_chart.png" alt="Multi-line chart showing income trends across European countries and aggregates" width="100%" />
       </td>
     </tr>
     <tr>
-      <td><strong>European benchmarks</strong></td>
+      <td><strong>European Benchmarks</strong></td>
       <td>Compare results with the <strong>Euro area, EU, 10th/25th/50th/75th/90th percentiles, and European average</strong>.</td>
     </tr>
   </tbody>
@@ -120,18 +120,18 @@ An interactive **European choropleth map** displaying income values by country f
   </thead>
   <tbody>
     <tr>
-      <td><strong>Explore geographical patterns</strong></td>
+      <td><strong>Geographical Distribution</strong></td>
       <td>Examine income distribution across European countries and identify differences using a graduated color scale.</td>
       <td rowspan="3" align="center" valign="middle">
         <img src="assets/choropleth_map.png" alt="Choropleth map showing income distribution across European countries" width="100%" />
       </td>
     </tr>
     <tr>
-      <td><strong>Track changes over time</strong></td>
+      <td><strong>Temporal Trends</strong></td>
       <td>Select a year to explore changing income patterns.</td>
     </tr>
     <tr>
-      <td><strong>View country details</strong></td>
+      <td><strong>Country-Level Details</strong></td>
       <td>Hover over a country to see its income value, <strong>currency or unit (EUR, PPS, or NAC)</strong>, selected <strong>sex and age group</strong>, and Eurostat observation <strong>flags</strong> for the selected year: <strong>(b)</strong> break in time series, <strong>(e)</strong> estimated, and <strong>(p)</strong> provisional.</td>
     </tr>
   </tbody>
@@ -148,9 +148,7 @@ An interactive **European choropleth map** displaying income values by country f
 
 The dashboard provides interactive filters that allow users to tailor their analysis to specific countries, demographic groups, and income measures.
 
-<p align="center">
-  <img src="assets/slicers.png" alt="Interactive dashboard filters for countries, demographic groups, and income measures" width="75%" />
-</p>
+![Dashboard Slicers](assets/slicers.png)
 
 | Filter | Available selections | Description |
 |---|---|---|
