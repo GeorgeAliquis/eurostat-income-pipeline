@@ -73,20 +73,30 @@ The star schema is extracted from a PostgreSQL database, allowing automatic refr
 A multi-series line chart illustrating how **income levels change over time** across selected countries and European aggregates.
 
 
+
 <table>
-  <tr>
-    <td width="50%" valign="middle">
-
-**Key capabilities:**
-- **Country comparison:** Analyze multiple countries and track trends from **1995–2025**.
-- **European benchmarks:** Compare results with the **Euro area, EU, 10th/25th/50th/75th/90th percentiles, and European average**.
-
-    </td>
-    <td width="50%" align="center" valign="middle">
-      <img src="assets/multi-line_chart.png" alt="Multi-line chart showing income trends across European countries and aggregates" width="100%" />
-    </td>
-  </tr>
+  <thead>
+    <tr>
+      <th width="25%">Feature</th>
+      <th width="45%">Description</th>
+      <th width="30%" align="center">Preview</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Country comparisons</strong></td>
+      <td>Analyze multiple countries and track trends from <strong>1995–2025</strong>.</td>
+      <td rowspan="2" align="center" valign="middle">
+        <img src="assets/multi-line_chart.png" alt="Multi-line chart showing income trends across European countries and aggregates" width="100%" />
+      </td>
+    </tr>
+    <tr>
+      <td><strong>European benchmarks</strong></td>
+      <td>Compare results with the <strong>Euro area, EU, 10th/25th/50th/75th/90th percentiles, and European average</strong>.</td>
+    </tr>
+  </tbody>
 </table>
+
 
 **Multi-line chart implementation:**
 - **Country colors:** Derived from national flags using the [REST Countries API](https://restcountries.com/), with local caching.
@@ -99,22 +109,34 @@ A multi-series line chart illustrating how **income levels change over time** ac
 
 An interactive **European choropleth map** displaying income values by country for the selected year.
 
+
 <table>
-  <tr>
-    <td width="60%" valign="middle">
-
-**Key capabilities:**
-
-- **Explore geographical patterns:** Examine income distribution across European countries and identify differences using a graduated color scale.
-- **Track changes over time:** Select a year to explore changing income patterns.
-- **View country details:** Hover over a country to see its income value, **currency or unit (EUR, PPS, or NAC)**, selected **sex and age group**, and Eurostat observation **flags** for the selected year: **(b)** break in time series, **(e)** estimated, and **(p)** provisional.
-
-    </td>
-    <td width="40%" align="center" valign="middle">
-      <img src="assets/choropleth_map.png" alt="Choropleth map showing income distribution across European countries" width="100%" />
-    </td>
-  </tr>
+  <thead>
+    <tr>
+      <th width="25%">Feature</th>
+      <th width="45%">Description</th>
+      <th width="30%" align="center">Preview</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Explore geographical patterns</strong></td>
+      <td>Examine income distribution across European countries and identify differences using a graduated color scale.</td>
+      <td rowspan="3" align="center" valign="middle">
+        <img src="assets/choropleth_map.png" alt="Choropleth map showing income distribution across European countries" width="100%" />
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Track changes over time</strong></td>
+      <td>Select a year to explore changing income patterns.</td>
+    </tr>
+    <tr>
+      <td><strong>View country details</strong></td>
+      <td>Hover over a country to see its income value, <strong>currency or unit (EUR, PPS, or NAC)</strong>, selected <strong>sex and age group</strong>, and Eurostat observation <strong>flags</strong> for the selected year: <strong>(b)</strong> break in time series, <strong>(e)</strong> estimated, and <strong>(p)</strong> provisional.</td>
+    </tr>
+  </tbody>
 </table>
+
 
 **Map implementation:**
 - The map uses the **Shape Map visual in Power BI**, with country boundaries defined by a custom **GeoJSON** file.
