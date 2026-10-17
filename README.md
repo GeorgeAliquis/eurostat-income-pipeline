@@ -72,16 +72,17 @@ The star schema is extracted from a PostgreSQL database, allowing automatic refr
 
 A multi-series line chart illustrating how **income levels change over time** across selected countries and European aggregates.
 
+
 <table>
   <tr>
-    <td width="60%" valign="middle">
+    <td width="50%" valign="middle">
 
 **Key capabilities:**
 - **Country comparison:** Analyze multiple countries and track trends from **1995–2025**.
 - **European benchmarks:** Compare results with the **Euro area, EU, 10th/25th/50th/75th/90th percentiles, and European average**.
 
     </td>
-    <td width="40%" align="center" valign="middle">
+    <td width="50%" align="center" valign="middle">
       <img src="assets/multi-line_chart.png" alt="Multi-line chart showing income trends across European countries and aggregates" width="100%" />
     </td>
   </tr>
