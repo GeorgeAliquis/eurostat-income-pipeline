@@ -1,15 +1,17 @@
 """
-Transform raw Eurostat income data into a star-schema dataset.
+Transform raw Eurostat income data into a dimensional star schema.
 
-This module cleans and reshapes income data into long format, extracts
-observation flags, attaches dimension surrogate keys, and builds the fact
-and dimension tables. It also calculates international income benchmarks
-(percentiles and mean) from eligible country-level observations, appends
-them to the fact table, and exports the resulting tables as CSV files.
+This module cleans and reshapes annual income observations, extracts data-quality
+flags, builds dimension tables, and maps surrogate keys to the fact table.
+It also calculates European income benchmarks (P10, P25, P50, P75, P90, and
+mean) from eligible country-level data, appending the results to the fact
+and country dimension tables. The resulting tables will be exported as CSV
+files and loaded into a database.
 
 Main entry point:
     build_star_schema(): Builds and returns the fact table and dimensions.
 """
+
 import pandas as pd
 
 from etl.paths import RAW_DATASET, PROCESSED_DATA_DIR
@@ -65,16 +67,6 @@ def expand_info_column(df: pd.DataFrame) -> pd.DataFrame:
     values. This function extracts the field names from the column header,
     splits each row into the corresponding fields, and removes the original
     packed column.
-
-    Parameters
-    ----------
-    df : pd.DataFrame
-        Raw dataset containing the packed metadata column.
-
-    Returns
-    -------
-    pd.DataFrame
-        Dataset with the metadata fields expanded into individual columns.
     """
     info_column = df.columns[0]
 
@@ -96,11 +88,6 @@ def reshape_data(df: pd.DataFrame) -> pd.DataFrame:
 
     The resulting structure is suitable for analytical modeling
     and star schema fact table construction.
-
-    Returns
-    -------
-    DataFrame
-        Melted DataFrame with columns: id_vars + year + income
     """
     return df.melt(
         id_vars=ID_VARS,
@@ -118,21 +105,6 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     raw column names are normalized using COLUMN_RENAMES, and the redundant
     frequency column is removed. The year column is converted to integers;
     missing or invalid years raise an error.
-
-    Parameters
-    ----------
-    df : pd.DataFrame
-        Long-format dataset produced by reshape_data().
-
-    Returns
-    -------
-    pd.DataFrame
-        Cleaned dataset with standardized column names and integer years.
-
-    Raises
-    ------
-    ValueError
-        If year values are missing or cannot be converted to integers.
     """
 
     df.columns = df.columns.str.strip()
@@ -162,16 +134,6 @@ def extract_flags(df: pd.DataFrame) -> pd.DataFrame:
     separated flag. The function splits these entries into an income column
     and a flag column, converting income values to pandas' nullable integer
     type. Missing flags are represented by missing values.
-
-    Parameters
-    ----------
-    df : pd.DataFrame
-        Dataset containing an income column with optional embedded flags.
-
-    Returns
-    -------
-    pd.DataFrame
-        Dataset with numeric income values and a separate flag column.
     """
     split = (
         df["income"]
@@ -191,16 +153,6 @@ def sort_values(df: pd.DataFrame) -> pd.DataFrame:
     Observations are ordered by year, sex, country, statistic, age group,
     and unit using the predefined ascending or descending directions.
     This provides consistent processing and CSV output across runs.
-
-    Parameters
-    ----------
-    df : pd.DataFrame
-        Cleaned long-format observations.
-
-    Returns
-    -------
-    pd.DataFrame
-        Observations sorted by the configured column ordering.
     """
 
     order_mapping = {
@@ -228,18 +180,6 @@ def attach_surrogate_keys(
     This function performs the dimensional modeling step of the ETL pipeline,
     replacing human-readable attributes with integer surrogate keys
     suitable for relational storage.
-
-    Parameters
-    ----------
-    fact : DataFrame
-        Fact table containing natural keys prior to dimension mapping.
-    dims : dict[str, DataFrame]
-        Dictionary of dimension tables keyed by dimension name.
-
-    Returns
-    -------
-    DataFrame
-        Fact table enriched with surrogate key foreign keys.
     """
     fact = fact.copy()
 
@@ -322,21 +262,6 @@ def build_international_aggregates(
     Each country contributes one country-level income value to the
     calculation; the statistics are not weighted by population. Percentiles
     use pandas' default quantile interpolation method.
-
-    Parameters
-    ----------
-    fact_income : pd.DataFrame
-        Fact table containing income values and dimension foreign keys.
-    dim_country : pd.DataFrame
-        Country dimension containing country_id and is_country.
-    dim_unit : pd.DataFrame
-        Unit dimension containing unit_id and unit.
-
-    Returns
-    -------
-    pd.DataFrame
-        Wide-format benchmark data, with one row per observation group,
-        separate columns for each benchmark, and country_count.
     """
     # Identify the national-currency unit ID
     nac_unit_id = dim_unit.loc[
@@ -389,25 +314,6 @@ def reshape_international_aggregates(
     to their surrogate country IDs using the supplied aggregate dimension.
     Income values are rounded to the nearest integer and converted to
     pandas' nullable integer type. The flag column is set to missing.
-
-    Parameters
-    ----------
-    international_wide : pd.DataFrame
-        Wide-format benchmark results containing grouping keys, benchmark
-        values, and the number of contributing countries.
-    dim_aggregate : pd.DataFrame
-        Dimension rows containing country_code and country_id for each
-        calculated benchmark.
-
-    Returns
-    -------
-    pd.DataFrame
-        Long-format benchmark observations ready to append to the fact table.
-
-    Raises
-    ------
-    ValueError
-        If any benchmark code cannot be matched to a dimension row.
     """
     id_cols = GROUP_COLS + ["country_count"]
 
@@ -467,18 +373,6 @@ def append_international_aggregates(
     Original country observations are retained. Benchmark rows use the same
     columns as the original fact table and include country_count, indicating
     the number of distinct countries contributing to each calculation.
-
-    Parameters
-    ----------
-    fact : pd.DataFrame
-        Fact table containing country-level observations and foreign keys.
-    dims : dict[str, pd.DataFrame]
-        Dimension tables, including country and unit dimensions.
-
-    Returns
-    -------
-    tuple[pd.DataFrame, dict[str, pd.DataFrame]]
-        The expanded fact table and updated dimension dictionary.
     """
     print("Calculating European benchmarks...")
 
@@ -546,21 +440,6 @@ def save_to_csv(
     Each dimension is written to a file named dim_<dimension>.csv, and the
     fact table is written to fact_income.csv. All files are saved in
     PROCESSED_DATA_DIR, overwriting existing files with the same names.
-
-    Parameters
-    ----------
-    fact : pd.DataFrame
-        Final fact table, including calculated European benchmark rows.
-    dims : dict[str, pd.DataFrame]
-        Final dimension tables, including benchmark entries in dim_country.
-
-    Returns
-    -------
-    None
-
-    Side Effects
-    ------------
-    Creates output files in PROCESSED_DATA_DIR.
     """
     for dim_name in DIMENSION_KEYS.keys():
         dims[dim_name].to_csv(

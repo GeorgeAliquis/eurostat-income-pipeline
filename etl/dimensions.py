@@ -1,7 +1,31 @@
 """
-ETL dimension builders for transforming raw dataset columns into normalized lookup tables
-(country, sex, unit, statinfo, age) with surrogate keys and derived attributes.
+Build dimension tables for the Eurostat income data warehouse.
+
+Dimensions:
+    Country:
+        Maps country codes to names, identifies countries and European
+        aggregates, and optionally assigns flag-derived colors.
+
+    Sex:
+        Maps sex codes to descriptive labels for total, male, and female.
+
+    Unit:
+        Maps income unit codes to labels for euros, purchasing power
+        standards, and national currencies.
+
+    Statinfo:
+        Maps statistical codes to descriptive labels for mean and median
+        income statistics.
+
+    Age:
+        Parses age group codes into age boundaries, categories, and
+        descriptive labels.
+
+All dimensions are consistently sorted and assigned surrogate keys.
+Country flag colors can be retrieved from the REST Countries API and
+cached locally for consistent country colors in Power BI.
 """
+
 import math
 import os
 import re

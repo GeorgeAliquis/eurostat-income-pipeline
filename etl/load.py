@@ -1,3 +1,16 @@
+"""
+Manage the PostgreSQL database operations for the income ETL pipeline.
+
+This module provides functions to create a database connection, reset the
+database objects used by the pipeline, create the income analysis view, and
+load the fact and dimension tables into PostgreSQL.
+
+Database connection settings are loaded from environment variables defined
+in the configured environment file. The star schema consists of country,
+age, sex, statinfo, and unit dimensions, the income fact table, and an
+analytical view for reporting.
+"""
+
 import os
 
 import pandas as pd

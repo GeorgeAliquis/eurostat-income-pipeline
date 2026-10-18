@@ -1,3 +1,10 @@
+"""
+Define project-wide paths and configuration constants.
+
+Centralizes the Eurostat data URL and paths for environment settings,
+raw and processed datasets, cached country data, and SQL scripts.
+"""
+
 from pathlib import Path
 
 EUROSTAT_URL = "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/ilc_di03?format=TSV"

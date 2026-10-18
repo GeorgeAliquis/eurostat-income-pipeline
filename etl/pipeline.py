@@ -1,3 +1,10 @@
+"""
+Run the end-to-end Eurostat income ETL pipeline.
+
+Fetches and saves raw data, transforms it into a star schema, exports the
+resulting tables to CSV, and loads them into PostgreSQL.
+"""
+
 from etl.paths import EUROSTAT_URL, RAW_DATASET
 from etl.extract import fetch_eurostat_data, save_raw_data
 from etl.transform import build_star_schema, save_to_csv
