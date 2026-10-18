@@ -12,6 +12,7 @@ The data is cleaned, transformed and modeled in a **dimensional star schema**, p
 
 ## Table of Contents
 
+- [Overview](#overview)
 - [Dashboard Preview](#dashboard-preview)
 - [Analytical Questions](#analytical-questions)
 - [Dataset](#dataset)
