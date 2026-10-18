@@ -22,7 +22,7 @@ The data is cleaned, transformed and modeled in a **dimensional star schema**, p
   - [Interactive Filters and Settings](#interactive-filters-and-settings)
 - [Project Workflow](#project-workflow)
 - [Data Warehouse Schema](#data-warehouse-schema)
-- [Repository Structure](#repository-structure)
+- [Project Structure](#project-structure)
 - [Technologies](#technologies)
 - [Author](#author)
 
@@ -69,11 +69,9 @@ The star schema is extracted from a PostgreSQL database, allowing automatic refr
 
 
 <a id="income-trends-across-europe"></a>
-### 1. Income Trends Across Europe — Multi-line Chart 📈
+### 1. Multi-line Chart — Income Trends Across Europe 📈
 
 A multi-series line chart illustrating how **income levels change over time** across selected countries and European aggregates.
-
-
 
 <table>
   <thead>
@@ -86,7 +84,7 @@ A multi-series line chart illustrating how **income levels change over time** ac
   <tbody>
     <tr>
       <td><strong>Country Comparisons</strong></td>
-      <td>Analyze multiple countries and track trends from <strong>1995–2025</strong>.</td>
+      <td>Analyze multiple countries and track trends from <strong>1995 to 2025</strong>.</td>
       <td rowspan="2" align="center" valign="middle">
         <img src="assets/multi-line_chart.png" alt="Multi-line chart showing income trends across European countries and aggregates" width="100%" />
       </td>
@@ -106,10 +104,9 @@ A multi-series line chart illustrating how **income levels change over time** ac
 - **API configuration:** `REST_COUNTRIES_API_KEY` is required for automatic flag-based color assignment.
 
 <a id="income-by-country"></a>
-### 2. Income by Country — Choropleth Map 🗺️
+### 2. Choropleth Map — Income by Country 🗺️
 
 An interactive **European choropleth map** displaying income values by country for the selected year.
-
 
 <table>
   <thead>
@@ -214,7 +211,7 @@ dim_unit
 
 ---
 
-## Repository Structure
+## Project Structure
 
 ```text
 .
